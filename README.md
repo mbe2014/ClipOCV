@@ -9,8 +9,8 @@ Quick links:
 ## About 
 CLIP, (C++ Library for Image Processing) was a simple C++ library written at the Hebrew University of Jerusalem at the late 1990s 
 
-ClipOCV is an implementation of the CLIP interface over OpenCV, where CLIP is mostly (but not entirely) a wrapper.
-OpenCV can be used directly wherever CLIP interface is not (yet) available. 
+ClipOCV is an implementation of the CLIP interface over OpenCV, where ClipOCV is now mostly (but not entirely) a wrapper over OpenCV.
+OpenCV can be used directly wherever ClipOCV interface is not (yet) available. 
 
 ClipOCV has several features that make it (or so I believe), elegant and very comfortable to use
 and with the use of move semantics it is in most cases as efficient using OpenCV directly. 
@@ -30,14 +30,10 @@ Some of these features include:
 5. Run cmake: **cmake ..**
 6. Run make - this will create both library and examples: **make**
 7. Optionally install library and include files: **make install**
+8. Shell script **build.sh** will run steps 3 through 6 for Debug and Release setting.
 
 ---
 
 CLIP    is copyright (c) 1997 - Hebrew University of Jerusalem<br>
 ClipOCV is copyright (c) 2017 - Moshe Ben-Ezra<br>
-
-
-
-
-
 

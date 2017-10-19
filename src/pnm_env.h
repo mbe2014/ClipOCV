@@ -25,9 +25,9 @@ public:
     
     // I/O
     
-    pnm &Read(char *fname);
+    pnm &Read(const char *fname);
     pnm &Read(FILE *fp);
-    void Write(char *fname);
+    void Write(const char *fname);
     void Write(FILE *fp);
     
     // Operators - from internal data type to pnm

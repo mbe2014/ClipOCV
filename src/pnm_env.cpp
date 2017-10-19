@@ -32,7 +32,7 @@ pnm &pnm::Read(FILE *fp)
 }
 
 
-pnm &pnm::Read(char *fname)
+pnm &pnm::Read(const char *fname)
 {
     FILE *fp;
     
@@ -57,7 +57,7 @@ void pnm::Write(FILE *fp)
     write_image(fp,pnm_img);
 }
 
-void pnm::Write(char *fname)
+void pnm::Write(const char *fname)
 {
     FILE *fp;
     

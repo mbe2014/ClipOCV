@@ -354,7 +354,7 @@ public:
     }
 
     //@@@ need to consider ROI
-    template<typename A> img_t map(T f(int x, int y, image_t<T, ocvType> *self), A arg){
+    template<typename A> img_t map(T f(int x, int y, image_t<T, ocvType> *self, A arg), A arg){
         
         img_t res(width, height, orgX, orgY);
         

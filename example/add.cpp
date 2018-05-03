@@ -29,6 +29,9 @@
 #include "clipocv.h"
 using namespace clipocv;
 
+// prevent internal compiler error
+#pragma GCC optimize ("O0")
+
 int main(int argc, char *argv[])
 {
     float val = (argc > 1 ? atoi(argv[1]): 0);

@@ -24,7 +24,7 @@ namespace clipocv {
 
 fMonoImg::operator fRgbImg() {
     fRgbImg res(width, height);
-    cv::cvtColor(mat, res.mat, cv::COLOR_GRAY2RGB);
+    cv::cvtColor(mat, res.GetMat(), cv::COLOR_GRAY2RGB);
     return res;
 }
 
@@ -98,7 +98,7 @@ fMonoImg::operator fCmpImg() {
 
 fRgbImg::operator fMonoImg() {
     fMonoImg res(width, height);
-    cv::cvtColor(mat, res.mat, cv::COLOR_RGB2GRAY);
+    cv::cvtColor(mat, res.GetMat(), cv::COLOR_RGB2GRAY);
     return res;
 }
 

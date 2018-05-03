@@ -107,15 +107,15 @@ extern fKernel Gx3, Gy3, Gx5, Gy5, Gx7, Gy7;
 
 template<class T, int ocvType> class img_t : public image_t<T, ocvType> {
     
-public:
-    
+protected:    
     using image_t<T, ocvType>::mat;
     using image_t<T, ocvType>::width;
     using image_t<T, ocvType>::height;
     using image_t<T, ocvType>::orgX;
     using image_t<T, ocvType>::orgY;
     using image_t<T, ocvType>::pix;
-    
+
+public:
     using image_t<T, ocvType>::GetWidth;
     using image_t<T, ocvType>::GetHeight;
     using image_t<T, ocvType>::GetSize;
@@ -442,6 +442,19 @@ public:
     }
     
     
+    // resize (linear interpolation)
+    img_t Resize(const double fxy) {
+        cv::Mat m;
+        cv::resize(this->GetMat(),m,cv::Size(0,0), fxy, fxy);
+        return img_t(m,false);
+    }
+    
+    img_t Resize(const unsigned w, const unsigned h) {
+        cv::Mat m;
+        cv::resize(this->GetMat(),m,cv::Size(w,h));
+        return img_t(m,false);
+    }
+
     // contructor/distructor  
     
     img_t() : image_t<T,ocvType>(){}
@@ -449,7 +462,7 @@ public:
     img_t(const unsigned w, const unsigned h,
           const int ox=0, const int oy=0) : image_t<T, ocvType>(w, h,ox,oy){}
     
-    img_t(const cv::Mat &mat) : image_t<T, ocvType>(mat){}
+    img_t(const cv::Mat &mat, bool flip=true) : image_t<T, ocvType>(mat, flip){}
    
     img_t(const img_t &img) : image_t<T, ocvType>(img){}
    

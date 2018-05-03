@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# build - just in case
+build
+
+# visual studio
+.vscode

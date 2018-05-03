@@ -63,7 +63,7 @@ void free_image(pnm_t *img)
 pnm_t *read_image(FILE *fp)
 {
     static pnm_t *image;
-    static char comment[1024]; // @@@ can crash
+    static char *comment; 
     
     if ((image = (pnm_t *) malloc(sizeof(pnm_t))) == NULL){
         error_msg("pnm: read_image - malloc failed",0);
@@ -82,10 +82,17 @@ pnm_t *read_image(FILE *fp)
     }
     
     
-    while(fscanf(fp,"#%[^\n]\n",comment) > 0);
+    while(fscanf(fp,"#%m[^\n]\n",&comment) > 0) free(comment);
     
-    fscanf(fp,"%u%u\n", &image->width, &image->height);
-    fscanf(fp,"%u%*c",   &image->maxval);   // force the new-line to be one char
+    if (fscanf(fp,"%u%u\n", &image->width, &image->height) != 2) {
+        error_msg("Pnm: rw: Not A pnm file",0);
+        clip_exception(ERR_UNKNOWN_FORMAT);
+    }
+
+    if (fscanf(fp,"%u%*c",   &image->maxval) != 1) {   // force the new-line to be one char
+        error_msg("Pnm: rw: Not A pnm file",0);
+        clip_exception(ERR_UNKNOWN_FORMAT);
+    }
     
     if((image->data = (uint8_t *)
         malloc(image->width * image->height * PSIZE(image->type))) == NULL){
@@ -93,10 +100,13 @@ pnm_t *read_image(FILE *fp)
         clip_exception(ERR_MALLOC);
     }
     
-    fread(image->data,
-          image->width * image->height,
-          PSIZE(image->type),
-          fp);
+    if (fread(image->data,
+              PSIZE(image->type),
+              image->width * image->height,
+              fp) != image->width * image->height) {
+        error_msg("Pnm: rw: corrupted image file",0);
+        clip_exception(ERR_UNKNOWN_FORMAT);
+    }
     
     return image;
 }
@@ -113,8 +123,8 @@ void write_image(FILE *fp, pnm_t *image)
     fprintf(fp,"%u%c", image->maxval,10);   // force a ^J newline
     
     fwrite(image->data,
-           image->width * image->height,
            PSIZE(image->type),
+           image->width * image->height,
            fp);
 }
 

@@ -462,7 +462,7 @@ public:
     img_t(const unsigned w, const unsigned h,
           const int ox=0, const int oy=0) : image_t<T, ocvType>(w, h,ox,oy){}
     
-    img_t(const cv::Mat &mat, bool flip=true) : image_t<T, ocvType>(mat, flip){}
+    img_t(const cv::Mat &mat, bool flip=true, bool clone = false) : image_t<T, ocvType>(mat, flip, clone){}
    
     img_t(const img_t &img) : image_t<T, ocvType>(img){}
    

@@ -184,7 +184,7 @@ public:
     fMonoImg(const unsigned w, const unsigned h,
              const int ox=0,   const int oy=0) : img_t<fMonoPix, CV_32FC1>(w, h,ox,oy){};
 
-    fMonoImg(const cv::Mat &mat) : img_t<fMonoPix, CV_32FC1>(mat){};
+    fMonoImg(const cv::Mat &mat, bool flip=true, bool clone = false) : img_t<fMonoPix, CV_32FC1>(mat, flip, clone){};
 
     // copy constructor
     fMonoImg(const fMonoImg &img) : img_t<fMonoPix, CV_32FC1>(img){};
@@ -317,7 +317,7 @@ public:
     fRgbImg(const unsigned w, const unsigned h,
             const int ox=0,   const int oy=0) : img_t<fRgbPix, CV_32FC3>(w, h,ox,oy){};
     
-    fRgbImg(const cv::Mat &mat) : img_t<fRgbPix, CV_32FC3>(mat){};
+    fRgbImg(const cv::Mat &mat, bool flip=true, bool clone = false) : img_t<fRgbPix, CV_32FC3>(mat, flip, clone){};
     
     // copy constructor
     fRgbImg(const fRgbImg &img) : img_t<fRgbPix, CV_32FC3>(img){};
@@ -451,7 +451,7 @@ public:
     bMonoImg() : img_t<bMonoPix, CV_8UC1>(){};
     bMonoImg(const unsigned w, const unsigned h,
              const int ox=0,   const int oy=0) : img_t<bMonoPix, CV_8UC1>(w, h,ox,oy){};
-    bMonoImg(const cv::Mat &mat) : img_t<bMonoPix, CV_8UC1>(mat){};
+    bMonoImg(const cv::Mat &mat, bool flip=true, bool clone = false) : img_t<bMonoPix, CV_8UC1>(mat, flip, clone){};
     
     // copy constructor
     bMonoImg(const bMonoImg &img) : img_t<bMonoPix, CV_8UC1>(img){};
@@ -583,7 +583,7 @@ public:
     bRgbImg(const unsigned w, const unsigned h,
             const int ox=0,   const int oy=0) : img_t<bRgbPix, CV_8UC3>(w, h,ox,oy){};
     
-    bRgbImg(const cv::Mat &mat) : img_t<bRgbPix, CV_8UC3>(mat){};
+    bRgbImg(const cv::Mat &mat, bool flip=true, bool clone = false) : img_t<bRgbPix, CV_8UC3>(mat, flip, clone){};
     
     // copy constructors
     bRgbImg(const bRgbImg &img) : img_t<bRgbPix, CV_8UC3>(img){};

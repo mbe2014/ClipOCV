@@ -199,13 +199,16 @@ public:
     }
     
     // types must match
-    image_t(const cv::Mat &m, bool flip = true) {
+    image_t(const cv::Mat &m, bool flip = true, bool clone = false) {
         assert(ocvType == m.type());  
         if ((ocvType == CV_8UC3 || ocvType == CV_32FC3) && flip) {
                 cv::cvtColor(m, mat, cv::COLOR_RGB2BGR);
         }   
-        else {
+        else if (clone) {
             mat = m.clone();
+        }
+        else {
+            mat = m;
         }
         width = mat.cols;
         height = mat.rows;

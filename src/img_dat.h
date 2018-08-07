@@ -33,55 +33,93 @@ namespace clipocv {
 template<class T, int ocvType> class image_t {
     
 protected:
-    cv::Mat mat;                    // OpenCV matte
-    unsigned width, height;     // effective width and height
-    int orgX, orgY;             // Origin location
-    T *pix;                     // Relative to origin !
+    cv::Mat mat;                            // OpenCV image  
+    int orgX, orgY;                         // Image origin in absolute coordinates
+    T *pix;                                 // Relative to origin !
+
+    cv::Mat roi;                            // OpenCV roi instance
+    unsigned roiX, roiY;                    // Roi top-left corner in absolute coordinates
     
 private:
     
 public:
     
     // Get attributes
-    const cv::Mat &GetMat() const  { return mat;              }
-    unsigned  GetWidth()    const  { return width;            }
-    unsigned  GetHeight()   const  { return height;           }
-    unsigned  GetSize()     const  { return width * height;   }
-    T * GetData()           const  { return (T *) mat.data;   }
-    
+    const cv::Mat &GetMat() const  { return mat;                                }
+    unsigned  GetWidth()    const  { return mat.cols;                           }
+    unsigned  GetHeight()   const  { return mat.rows;                           }
+    unsigned  GetSize()     const  { return GetWidth() * GetHeight();           }
+    T * GetData()           const  { return (T *) mat.data;                     }
+    T * GetLine(unsigned y) const  { return (T *) (mat.data + y*GetWidth());    }
+
+
+    const cv::Mat &GetRoi()    const  { return roi;                             }
+    unsigned  GetRoiWidth()    const  { return roi.cols;                        }      
+    unsigned  GetRoiHeight()   const  { return roi.rows;                        }
+    unsigned  GetRoiSize()     const  { return GetRoiWidth() * GetRoiHeight();  }
+    T * GetRoiData()           const  { return (T *) roi.data;                  }    
+    T * GetRoiLine(unsigned y) const  { return (T *) (roi.data + y*GetWidth()); }
+
     int GetOrgX()   const { return orgX; }
     int GetOrgY()   const { return orgY; }
+    int GetRoiX()   const { return roiX; }
+    int GetRoiY()   const { return roiY; }
+
     int GetXmin()   const { return  -orgX; }
     int GetYmin()   const { return  -orgY; }
-    int GetXmax()   const { return  width  - orgX - 1;      }
-    int GetYmax()   const { return  height - orgY - 1;      }
+    int GetXmax()   const { return  GetRoiWidth()  - orgX  - 1;      }
+    int GetYmax()   const { return  GetRoiHeight() - orgY  - 1;      }
     
     
     
-    // Set attributes.
-    // Set new origin.  (origin must be inside the image)
-    // note that Y coordinate positive direction is south ...
-    // note compiler was changed unsignd+signed behviour
+    // Set new origin.  (currently, origin must be inside the image)
+    // note that Y coordinate positive direction is south
+    // Origin is relative to ROI
     void SetOrigin(const int x, const int y) {
         orgX = x;
         orgY = y;
         
         if (GetData() != (T *)0 ) {
-            assert ((orgX >= 0 && orgX < (int) width &&
-                     orgY >= 0 && orgY < (int) height));
-            pix = (T *) &GetData()[y*(int)width + x];
+            assert (orgX >= 0 && orgX < (int) GetRoiWidth());
+            assert(orgY >= 0 && orgY < (int)  GetRoiHeight());
+            pix = (T *) &GetRoiData()[y*(int) GetWidth() + x];
         }
         else pix = (T *) 0;
     }
-    
-    void MovOrigin(const int x, const int y) {
-        SetOrigin(orgX + x, orgY + y);
+    // move origin with optional move roi with it
+    void MovOrigin(const int dx, const int dy, bool withRoi = false) {
+        SetOrigin(orgX + dx, orgY + dy);
+        if (withRoi) {
+            SetRoi(roiX+dx, roiY+dy, GetRoiWidth(), GetRoiHeight());
+        }
     }
     
-    
+
+    // set ROI - ROI is a window within an image - not a new image instance
+    // coordinates are alwase absolute coordinate of the image.
+    void SetRoi(const unsigned x, const unsigned y, const unsigned w, const unsigned h){
+        assert (x < GetWidth() && y < GetHeight());
+        assert (x+w < GetWidth() && y+h < GetHeight());
+
+        roi = mat(cv::Rect(x,y, w,h));
+        roiX = x;
+        roiY = y;
+    }
+
+    void SetRoi(cv::Rect rect){
+        SetRoi(rect.x, rect.y, rect.width, rect.height);
+    }
+ 
+    void MoveRoi(int dx, int dy, bool withOrigin = false) {
+        SetRoi(roiX+dx, roiY+dy, GetRoiWidth(), GetRoiHeight());
+        if (withOrigin) {
+            SetOrigin(orgX + dx, orgY + dy);
+        }
+    }
+
     // indexing operator(s)
 
-    //treat the image as a vector ignoring origin. index between 0 and GetSize()-1
+    //treat the image as a vector ignoring origin, ignoring ROI. index between 0 and GetSize()-1
     T &Pix(const unsigned i){
         assert(i < GetSize());
         return GetData()[i];
@@ -92,31 +130,31 @@ public:
         return GetData()[i];
     }
     
-    // 2D ignoring origin indexing operators
+    // 2D ignoring origin, ignoring ROI, indexing operators
     T &aPix(const int x, const int y){
         assert(x >= 0 && x < GetWidth());
         assert(y >= 0 && y < GetHeight());
-        return GetData()[y*(int)width + x];
+        return GetData()[y*(int)GetWidth() + x];
     }
     
     T &aPix(const int x, const int y) const {
         assert(x >= 0 && x < GetWidth());
         assert(y >= 0 && y < GetHeight());
-        return GetData()[y*(int)width + x];
+        return GetData()[y*(int)GetWidth() + x];
     }
 
     
-    // 2D relative to origin indexing operators
+    // 2D relative to origin indexing operators, check against ROI
     T &Pix(const int x, const int y){
         assert(x >= GetXmin() && x <= GetXmax());
         assert(y >= GetYmin() && y <= GetYmax());
-        return pix[y*(int)width + x];
+        return pix[y*(int)GetWidth() + x];
     }
     
     const T &Pix(const int x, const int y) const{
         assert(x >= GetXmin() && x <= GetXmax());
         assert(y >= GetYmin() && y <= GetYmax());
-        return pix[y*(int)width + x];
+        return pix[y*(int)GetWidth() + x];
     }
     
     
@@ -129,7 +167,7 @@ public:
         if (y <  GetYmin()) y = GetYmin();
         else if (y > GetYmax()) y = GetYmax();
         
-        return pix[y*(int)width + x];
+        return pix[y*(int)GetWidth() + x];
     }
     
     // float subscript indexing - bilinear interpolation.
@@ -166,15 +204,14 @@ public:
     
     // Data initialization operator.
     image_t &operator=(const T val){
-        mat = val;
+        roi = val;
         return *this;
     }
     
     // Assignment operator deep copy.
     image_t &operator=(const image_t &src){
-        mat = src.mat.clone();
-        width  = src.width;
-        height = src.height;
+        mat = src.roi.clone();  
+        SetRoi(0,0,GetWidth(), GetHeight());
         SetOrigin(src.orgX,src.orgY);
         return *this;
     }
@@ -183,19 +220,16 @@ public:
     // Constructor(s)
     image_t(){
         mat = cv::Mat();	// null image
-        width = 0;
-        height = 0;
         pix  = (T *)0 ;
         orgX = 0;
         orgY = 0;
+        SetRoi(0,0,GetWidth(),GetHeight());
     }
     
     image_t(const unsigned w, const unsigned h, const int ox=0, const int oy=0){
         mat = cv::Mat(h,w,ocvType);
-        width = w;
-        height = h;
-        SetOrigin(ox, oy);
-        
+        SetRoi(0,0, GetWidth(), GetHeight());
+        SetOrigin(ox, oy); 
     }
     
     // types must match
@@ -203,50 +237,53 @@ public:
         assert(ocvType == m.type());  
         if ((ocvType == CV_8UC3 || ocvType == CV_32FC3) && flip) {
                 cv::cvtColor(m, mat, cv::COLOR_RGB2BGR);
+                SetRoi(0,0,GetWidth(),GetHeight());
         }   
         else if (clone) {
             mat = m.clone();
+            SetRoi(0,0,GetWidth(),GetHeight());
         }
         else {
             mat = m;
+            SetRoi(0,0,GetWidth(),GetHeight());
         }
-        width = mat.cols;
-        height = mat.rows;
         SetOrigin(0,0);
     }
     
     // copy constructor - deep copy
     image_t(const image_t &img){
-        width  = img.width;
-        height = img.height;
         mat = img.mat.clone();
+        SetRoi(0,0,GetWidth(),GetHeight());
         SetOrigin(img.orgX, img.orgY);
     }
     
     // Distructor
     ~image_t(){
         mat.release();
-        width = 0;
-        height = 0;
+        roi.release();
         orgX = 0;
         orgY = 0;
+        roiX = 0;
+        roiY = 0;
         pix = (T *)0;
     }
 
     // move constructor - no deep copy
     image_t(image_t &&img){
-        width  = img.width;
-        height = img.height;
         mat = std::move(img.mat);
+        roi = std::move(img.roi);
+        roiX = img.roiX;
+        roiY = img.roiY;
         SetOrigin(img.orgX, img.orgY);
     }
 
     // move assignment operator - no deep copy.
-    image_t &operator=(image_t &&src){
-        width  = src.width;
-        height = src.height;
-        mat = std::move(src.mat);
-        SetOrigin(src.orgX,src.orgY);
+    image_t &operator=(image_t &&img){
+        mat = std::move(img.mat);
+        roi = std::move(img.roi);
+        roiX = img.roiX;
+        roiY = img.roiY;
+        SetOrigin(img.orgX,img.orgY);
         return *this;
     }
 

@@ -23,20 +23,20 @@
 namespace clipocv {
 
 fMonoImg::operator fRgbImg() {
-    fRgbImg res(width, height);
+    fRgbImg res(GetWidth(), GetHeight());
     cv::cvtColor(mat, res.GetMat(), cv::COLOR_GRAY2RGB);
     return res;
 }
 
 
 fMonoImg::operator bMonoImg() {
-    bMonoImg res(width, height);
+    bMonoImg res(GetWidth(), GetHeight());
     mat.convertTo(res.GetMat(),CV_8UC1);
     return res;
 }
 
 fMonoImg::operator bRgbImg() {
-    bRgbImg res(width, height);
+    bRgbImg res(GetWidth(), GetHeight());
     cv::Mat tmp;
     cv::cvtColor(mat, tmp, cv::COLOR_GRAY2RGB);
     tmp.convertTo(res.GetMat(),CV_32FC3);
@@ -45,7 +45,7 @@ fMonoImg::operator bRgbImg() {
 
 //@@@ need to consider ROI
 fMonoImg::operator fCieImg() {
-    fCieImg res(width, height);
+    fCieImg res(GetWidth(), GetHeight());
     fMonoPix    *p = GetData();
     fCiePix  *q = res.GetData();
     unsigned i;
@@ -70,7 +70,7 @@ fMonoImg::operator fCieImg() {
 
 //@@@ need to consider ROI
 fMonoImg::operator fCmpImg() {
-    fCmpImg res(width, height);
+    fCmpImg res(GetWidth(), GetHeight());
     fMonoPix   *p = GetData();
     fCmpPix *q = res.GetData();
     unsigned i;
@@ -97,14 +97,14 @@ fMonoImg::operator fCmpImg() {
 // rgb image casting
 
 fRgbImg::operator fMonoImg() {
-    fMonoImg res(width, height);
+    fMonoImg res(GetWidth(), GetHeight());
     cv::cvtColor(mat, res.GetMat(), cv::COLOR_RGB2GRAY);
     return res;
 }
 
 
 fRgbImg::operator bMonoImg() {
-    bMonoImg res(width, height);
+    bMonoImg res(GetWidth(), GetHeight());
     cv::Mat tmp;
     cv::cvtColor(mat, tmp, cv::COLOR_RGB2GRAY);
     tmp.convertTo(res.GetMat(),CV_8UC1);
@@ -112,14 +112,14 @@ fRgbImg::operator bMonoImg() {
 }
 
 fRgbImg::operator bRgbImg() {
-    bRgbImg res(width, height);
+    bRgbImg res(GetWidth(), GetHeight());
     mat.convertTo(res.GetMat(),CV_8UC3);
     return res;
 }
 
 // @@@ need to consider ROI
 fRgbImg::operator fCieImg() {
-    fCieImg res(width, height);
+    fCieImg res(GetWidth(), GetHeight());
     fRgbPix *p = GetData();
     fCiePix *q = res.GetData();
     unsigned i;
@@ -145,7 +145,7 @@ fRgbImg::operator fCieImg() {
 //@@@ need to consider ROI
 
 fRgbImg::operator fCmpImg() {
-    fCmpImg  res(width, height);
+    fCmpImg  res(GetWidth(), GetHeight());
     fRgbPix  *p = GetData();
     fCmpPix  *q = res.GetData();
     unsigned i;
@@ -173,7 +173,7 @@ fRgbImg::operator fCmpImg() {
 
 // @@@ Need to consider ROI
 fCieImg::operator fMonoImg() {
-    fMonoImg res(width, height);
+    fMonoImg res(GetWidth(), GetHeight());
     fCiePix *p = GetData();
     fMonoPix   *q = res.GetData();
     unsigned i;
@@ -198,7 +198,7 @@ fCieImg::operator fMonoImg() {
 
 // @@@ need to consider ROI
 fCieImg::operator bMonoImg() {
-    bMonoImg res(width, height);
+    bMonoImg res(GetWidth(), GetHeight());
     fCiePix *p = GetData();
     uint8_t *q = res.GetData();
     unsigned i;
@@ -223,7 +223,7 @@ fCieImg::operator bMonoImg() {
 
 //@@@ need to consider ROI
 fCieImg::operator bRgbImg() {
-    bRgbImg res(width, height);
+    bRgbImg res(GetWidth(), GetHeight());
     fCiePix *p = GetData();
     bRgbPix *q = res.GetData();
     unsigned i;
@@ -248,7 +248,7 @@ fCieImg::operator bRgbImg() {
 
 // @@@ need to consider ROI
 fCieImg::operator fRgbImg() {
-    fRgbImg res(width, height);
+    fRgbImg res(GetWidth(), GetHeight());
     fCiePix *p = GetData();
     fRgbPix *q = res.GetData();
     unsigned i;
@@ -273,7 +273,7 @@ fCieImg::operator fRgbImg() {
 
 // @@@ need to consider ROI
 fCieImg::operator fCmpImg() {
-    fCmpImg res(width, height);
+    fCmpImg res(GetWidth(), GetHeight());
     fCiePix *p = GetData();
     fCmpPix *q = res.GetData();
     unsigned i;
@@ -300,7 +300,7 @@ fCieImg::operator fCmpImg() {
 
 // @@@ need to consider ROI
 fCmpImg::operator fMonoImg() {
-    fMonoImg res(width, height);
+    fMonoImg res(GetWidth(), GetHeight());
     fCmpPix *p = GetData();
     fMonoPix   *q = res.GetData();
     unsigned i;
@@ -325,7 +325,7 @@ fCmpImg::operator fMonoImg() {
 
 
 fCmpImg::operator bMonoImg() {
-    bMonoImg res(width, height);
+    bMonoImg res(GetWidth(), GetHeight());
     fCmpPix  *p = GetData();
     uint8_t  *q = res.GetData();
     unsigned i;
@@ -350,7 +350,7 @@ fCmpImg::operator bMonoImg() {
 
 
 fCmpImg::operator bRgbImg() {
-    bRgbImg res(width, height);
+    bRgbImg res(GetWidth(), GetHeight());
     fCmpPix  *p = GetData();
     bRgbPix  *q = res.GetData();
     unsigned i;
@@ -375,7 +375,7 @@ fCmpImg::operator bRgbImg() {
 
 
 fCmpImg::operator fRgbImg() {
-    fRgbImg res(width, height);
+    fRgbImg res(GetWidth(), GetHeight());
     fCmpPix  *p = GetData();
     fRgbPix  *q = res.GetData();
     unsigned i;
@@ -399,7 +399,7 @@ fCmpImg::operator fRgbImg() {
 }
 
 fCmpImg::operator fCieImg() {
-    fCieImg res(width, height);
+    fCieImg res(GetWidth(), GetHeight());
     fCmpPix  *p = GetData();
     fCiePix  *q = res.GetData();
     unsigned i;
@@ -430,7 +430,7 @@ fCmpImg::operator fCieImg() {
 // monochome image casting
 
 bMonoImg::operator fRgbImg() {
-    fRgbImg res(width, height);
+    fRgbImg res(GetWidth(), GetHeight());
     cv::Mat tmp;
     cv::cvtColor(mat, tmp, cv::COLOR_GRAY2RGB);
     tmp.convertTo(res.GetMat(),CV_32FC3);
@@ -439,20 +439,20 @@ bMonoImg::operator fRgbImg() {
 
 
 bMonoImg::operator fMonoImg() {
-    fMonoImg res(width, height);
+    fMonoImg res(GetWidth(), GetHeight());
     mat.convertTo(res.GetMat(),CV_32FC1);
     return res;
 }
 
 bMonoImg::operator bRgbImg() {
-    bRgbImg res(width, height);
+    bRgbImg res(GetWidth(), GetHeight());
     cv::cvtColor(mat, res.GetMat(), cv::COLOR_GRAY2RGB);
     return res;
 }
 
 // @@@ need to consider ROI
 bMonoImg::operator fCieImg() {
-    fCieImg res(width, height);
+    fCieImg res(GetWidth(), GetHeight());
     uint8_t *p = GetData();
     fCiePix *q = res.GetData();
     unsigned i;
@@ -477,7 +477,7 @@ bMonoImg::operator fCieImg() {
 
 // @@@ need to consider ROI
 bMonoImg::operator fCmpImg() {
-    fCmpImg res(width, height);
+    fCmpImg res(GetWidth(), GetHeight());
     uint8_t *p = GetData();
     fCmpPix *q = res.GetData();
     unsigned i;
@@ -504,7 +504,7 @@ bMonoImg::operator fCmpImg() {
 // rgb image casting
 
 bRgbImg::operator fMonoImg() {
-    fMonoImg res(width, height);
+    fMonoImg res(GetWidth(), GetHeight());
     cv::Mat tmp;
     cv::cvtColor(mat, tmp, cv::COLOR_RGB2GRAY);
     tmp.convertTo(res.GetMat(),CV_8UC1);
@@ -513,20 +513,20 @@ bRgbImg::operator fMonoImg() {
 
 
 bRgbImg::operator bMonoImg() {
-    bMonoImg res(width, height);
+    bMonoImg res(GetWidth(), GetHeight());
     cv::cvtColor(mat, res.GetMat(), cv::COLOR_RGB2GRAY);
     return res;
 }
 
 bRgbImg::operator fRgbImg() {
-    fRgbImg res(width, height);
+    fRgbImg res(GetWidth(), GetHeight());
     mat.convertTo(res.GetMat(),CV_32FC3);
     return res;
 }
 
 //@@@ need to consider ROI
 bRgbImg::operator fCieImg() {
-    fCieImg res(width, height);
+    fCieImg res(GetWidth(), GetHeight());
     bRgbPix *p = GetData();
     fCiePix *q = res.GetData();
     unsigned i;
@@ -550,7 +550,7 @@ bRgbImg::operator fCieImg() {
 }
 
 bRgbImg::operator fCmpImg() {
-    fCmpImg res(width, height);
+    fCmpImg res(GetWidth(), GetHeight());
     bRgbPix *p = GetData();
     fCmpPix *q = res.GetData();
     unsigned i;

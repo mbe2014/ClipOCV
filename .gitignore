@@ -31,8 +31,9 @@
 *.out
 *.app
 
-# build - just in case
+# build and test dir - just in case
 build
+testdir
 
 # visual studio
 .vscode

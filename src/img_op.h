@@ -350,7 +350,6 @@ public:
     
     // map with image data self (this) pointer
     
-    //@@@ need to consider ROI
     img_t map(T f(int x, int y, image_t<T, ocvType> *self)){
         
         img_t res(GetWidth(), GetHeight());

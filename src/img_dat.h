@@ -72,26 +72,24 @@ public:
     
     
     
-    // Set new origin.  (currently, origin must be inside the image)
+    // Set new origin.  (currently, origin must be inside the ROI)
     // note that Y coordinate positive direction is south
     // Origin is relative to ROI
     void SetOrigin(const int x, const int y) {
         orgX = x;
         orgY = y;
         
-        if (GetData() != (T *)0 ) {
+        if (GetRoiData() != (T *)0 ) {
             assert (orgX >= 0 && orgX < (int) GetRoiWidth());
-            assert(orgY >= 0 && orgY < (int)  GetRoiHeight());
+            assert (orgY >= 0 && orgY < (int) GetRoiHeight());
             pix = (T *) &GetRoiData()[y*(int) GetWidth() + x];
         }
         else pix = (T *) 0;
     }
-    // move origin with optional move roi with it
-    void MovOrigin(const int dx, const int dy, bool withRoi = false) {
+
+    // move origin 
+    void MovOrigin(const int dx, const int dy) {
         SetOrigin(orgX + dx, orgY + dy);
-        if (withRoi) {
-            SetRoi(roiX+dx, roiY+dy, GetRoiWidth(), GetRoiHeight());
-        }
     }
     
 
@@ -110,11 +108,10 @@ public:
         SetRoi(rect.x, rect.y, rect.width, rect.height);
     }
  
+    // move ROI, origin moves with ROI
     void MoveRoi(int dx, int dy, bool withOrigin = false) {
         SetRoi(roiX+dx, roiY+dy, GetRoiWidth(), GetRoiHeight());
-        if (withOrigin) {
-            SetOrigin(orgX + dx, orgY + dy);
-        }
+        SetOrigin(orgX, orgY); // relative to new ROI
     }
 
     // indexing operator(s)
@@ -130,7 +127,7 @@ public:
         return GetData()[i];
     }
     
-    // 2D ignoring origin, ignoring ROI, indexing operators
+    // 2D absolute indexing ignoring origin, ignoring ROI, indexing operators
     T &aPix(const int x, const int y){
         assert(x >= 0 && x < GetWidth());
         assert(y >= 0 && y < GetHeight());
@@ -221,9 +218,9 @@ public:
     image_t(){
         mat = cv::Mat();	// null image
         pix  = (T *)0 ;
+        SetRoi(0,0,GetWidth(),GetHeight());
         orgX = 0;
         orgY = 0;
-        SetRoi(0,0,GetWidth(),GetHeight());
     }
     
     image_t(const unsigned w, const unsigned h, const int ox=0, const int oy=0){

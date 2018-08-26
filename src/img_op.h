@@ -278,7 +278,7 @@ public:
     // border is replicated (prevents discontinuity)
     
     img_t operator*(const fKernel &ker){
-        img_t res(GetWidth(), GetHeight());
+        img_t res(GetRoiWidth(), GetRoiHeight());
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);
         cv::Mat flipKer;
@@ -295,11 +295,12 @@ public:
         img_t res(GetRoiWidth(), GetRoiHeight());  
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);
-        for (int y=0; y<GetRoiHeight(); y++) {
+
+        for (int y=0; y<res.GetRoiHeight(); y++) {
             T *p = GetRoiLine(y);
             T *q = res.GetRoiLine(y);
             unsigned i;
-            for (i = 0 ; i < GetRoiWidth()-8 ; i+=8) {
+            for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
                 *(q+0) = f(*(p+0));
                 *(q+1) = f(*(p+1));
                 *(q+2) = f(*(p+2));
@@ -323,11 +324,11 @@ public:
         img_t res(GetRoiWidth(), GetRoiHeight());  
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);
-        for (int y=0; y<GetRoiHeight(); y++) {
+        for (int y=0; y<res.GetRoiHeight(); y++) {
             T *p = GetRoiLine(y);
             T *q = res.GetRoiLine(y);
             unsigned i;
-            for (i = 0 ; i < GetRoiWidth()-8 ; i+=8) {
+            for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
                 *(q+0) = f(*(p+0), arg);
                 *(q+1) = f(*(p+1), arg);
                 *(q+2) = f(*(p+2), arg);
@@ -356,10 +357,10 @@ public:
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);        
         int y,x;
-        for (y = GetYmin() ; y <= GetYmax() ; y++){
+        for (y = res.GetYmin() ; y <= res.GetYmax() ; y++){
             T *p = &Pix(GetXmin(),y);
             T *q = &res.Pix(res.GetXmin(),y);
-            for (x = GetXmin() ; x <= GetXmax()-8 ; x+=8){
+            for (x = res.GetXmin() ; x <= res.GetXmax()-8 ; x+=8){
                 *(q+0) = f(x+0,y, this);
                 *(q+1) = f(x+1,y, this);
                 *(q+2) = f(x+2,y, this);
@@ -385,10 +386,10 @@ public:
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);        
         int y,x;
-        for (y = GetYmin() ; y <= GetYmax() ; y++){
+        for (y = res.GetYmin() ; y <= res.GetYmax() ; y++){
             T *p = &Pix(GetXmin(),y);
             T *q = &res.Pix(res.GetXmin(),y);
-            for (x = GetXmin() ; x <= GetXmax()-8 ; x+=8){
+            for (x = res.GetXmin() ; x <= res.GetXmax()-8 ; x+=8){
                 *(q+0) = f(x+0,y, this, arg);
                 *(q+1) = f(x+1,y, this, arg);
                 *(q+2) = f(x+2,y, this, arg);
@@ -411,8 +412,15 @@ public:
     // inverse.
     // inverse of unsigned is the complement. 
     img_t operator-(){
-            assert (ocvType != CV_8UC1 && ocvType != CV_8UC3);
-            return (*this * (T)(-1));
+            img_t res(GetRoiWidth(), GetRoiHeight());
+            res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+            res.SetOrigin(orgX, orgY);       
+            if (ocvType == CV_8UC1 || ocvType == CV_8UC3) {
+                res.roi = cv::Scalar::all(255) - roi;
+                return res;
+            }
+            cv::multiply(roi,cv::Scalar::all(-1), res.roi);
+            return res;
     }
     
     

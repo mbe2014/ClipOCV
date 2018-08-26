@@ -50,7 +50,7 @@ public:
     unsigned  GetHeight()   const  { return mat.rows;                           }
     unsigned  GetSize()     const  { return GetWidth() * GetHeight();           }
     T * GetData()           const  { return (T *) mat.data;                     }
-    T * GetLine(unsigned y) const  { return (T *) (mat.data + y*GetWidth());    }
+    T * GetLine(unsigned y) const  { return ((T *) mat.data) + y*GetWidth();    }
 
 
     const cv::Mat &GetRoi()    const  { return roi;                             }
@@ -58,7 +58,7 @@ public:
     unsigned  GetRoiHeight()   const  { return roi.rows;                        }
     unsigned  GetRoiSize()     const  { return GetRoiWidth() * GetRoiHeight();  }
     T * GetRoiData()           const  { return (T *) roi.data;                  }    
-    T * GetRoiLine(unsigned y) const  { return (T *) (roi.data + y*GetWidth()); }
+    T * GetRoiLine(unsigned y) const  { return ((T *) roi.data) + y*GetWidth(); }
 
     int GetOrgX()   const { return orgX; }
     int GetOrgY()   const { return orgY; }

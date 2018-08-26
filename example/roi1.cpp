@@ -32,13 +32,8 @@ using namespace clipocv;
 int main(int argc, char *argv[])
 {
     fRgbImg img = pnm(stdin);
-    fprintf(stderr,"%d %d - %d %d\n",img.GetWidth(), img.GetHeight(), img.GetRoiWidth(), img.GetRoiHeight());
     img.SetRoi(img.GetWidth()/4, img.GetHeight()/4, img.GetWidth()/2, img.GetHeight()/2); 
-    fprintf(stderr,"%d %d - %d %d\n",img.GetWidth(), img.GetHeight(), img.GetRoiWidth(), img.GetRoiHeight());
     img *= -1;
     img += 255;
-    fprintf(stderr,"%d %d - %d %d\n",img.GetWidth(), img.GetHeight(), img.GetRoiWidth(), img.GetRoiHeight());
     pnm((bRgbImg) img).Write(stdout);
-
-    fprintf(stderr,"sizeofmat: %ld\n",sizeof(cv::Mat));
 }

@@ -53,7 +53,7 @@ public:
     T * GetLine(unsigned y) const  { return ((T *) mat.data) + y*GetWidth();    }
 
 
-    const cv::Mat &GetRoi()    const  { return roi;                             }
+    const cv::Mat &GetRoiMat() const  { return roi;                             }
     unsigned  GetRoiWidth()    const  { return roi.cols;                        }      
     unsigned  GetRoiHeight()   const  { return roi.rows;                        }
     unsigned  GetRoiSize()     const  { return GetRoiWidth() * GetRoiHeight();  }
@@ -102,6 +102,7 @@ public:
         roi = mat(cv::Rect(x,y, w,h));
         roiX = x;
         roiY = y;
+        SetOrigin(0,0); // previous origin if any is not valid anymore
     }
 
     void SetRoi(cv::Rect rect){
@@ -109,7 +110,7 @@ public:
     }
  
     // move ROI, origin moves with ROI
-    void MoveRoi(int dx, int dy, bool withOrigin = false) {
+    void MoveRoi(int dx, int dy) {
         SetRoi(roiX+dx, roiY+dy, GetRoiWidth(), GetRoiHeight());
         SetOrigin(orgX, orgY); // relative to new ROI
     }
@@ -199,17 +200,17 @@ public:
     }
     
     
-    // Data initialization operator.
+    // Data initialization operator. Only the ROI is assigned
     image_t &operator=(const T val){
         roi = val;
         return *this;
     }
     
-    // Assignment operator deep copy.
+    // Assignment operator deep copy. Entire image is assigned
     image_t &operator=(const image_t &src){
-        mat = src.roi.clone();  
-        SetRoi(0,0,GetWidth(), GetHeight());
-        SetOrigin(src.orgX,src.orgY);
+        mat = src.mat.clone();
+        SetRoi(src.roiX,src.roiY,src.GetRoiWidth(),src.GetRoiHeight());
+        SetOrigin(src.orgX, src.orgY);
         return *this;
     }
     
@@ -219,8 +220,7 @@ public:
         mat = cv::Mat();	// null image
         pix  = (T *)0 ;
         SetRoi(0,0,GetWidth(),GetHeight());
-        orgX = 0;
-        orgY = 0;
+        SetOrigin(0, 0); 
     }
     
     image_t(const unsigned w, const unsigned h, const int ox=0, const int oy=0){
@@ -247,10 +247,10 @@ public:
         SetOrigin(0,0);
     }
     
-    // copy constructor - deep copy
+    // copy constructor - deep copy - entire image is copied
     image_t(const image_t &img){
         mat = img.mat.clone();
-        SetRoi(0,0,GetWidth(),GetHeight());
+        SetRoi(img.roiX,img.roiY,img.GetRoiWidth(),img.GetRoiHeight());
         SetOrigin(img.orgX, img.orgY);
     }
     
@@ -265,21 +265,17 @@ public:
         pix = (T *)0;
     }
 
-    // move constructor - no deep copy
+    // move constructor - no deep copy - Entire image is moved
     image_t(image_t &&img){
         mat = std::move(img.mat);
-        roi = std::move(img.roi);
-        roiX = img.roiX;
-        roiY = img.roiY;
+        SetRoi(img.roiX,img.roiY,img.GetRoiWidth(),img.GetRoiHeight());
         SetOrigin(img.orgX, img.orgY);
     }
 
-    // move assignment operator - no deep copy.
+    // move assignment operator - Entire image is moved
     image_t &operator=(image_t &&img){
         mat = std::move(img.mat);
-        roi = std::move(img.roi);
-        roiX = img.roiX;
-        roiY = img.roiY;
+        SetRoi(img.roiX,img.roiY,img.GetRoiWidth(),img.GetRoiHeight());
         SetOrigin(img.orgX,img.orgY);
         return *this;
     }

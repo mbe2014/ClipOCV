@@ -190,5 +190,18 @@ fCmpPix::operator bRgbPix() {
     return tmp;
 }
 
+fCmpPix::operator bMonoPix() {
+    bMonoPix tmp;
+    tmp = (bMonoPix) (GetNorm() + 0.5);
+    return tmp;
+}
+
+fCmpPix::operator fMonoPix() {
+    fMonoPix tmp;
+    tmp = (fMonoPix) (GetNorm() + 0.5);
+    return tmp;
+}
+
+
 } // namepsace
 

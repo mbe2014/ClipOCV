@@ -20,12 +20,10 @@
 #include "rgb.h"
 #include "cie.h"
 #include "complex.h"
+#include "color.h"
 #include "img_op.h"
 
 namespace clipocv {
-
-typedef uint8_t bMonoPix;
-typedef float   fMonoPix;
 
 // following defines are syntactic sugar for map function
 

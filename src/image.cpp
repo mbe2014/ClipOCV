@@ -43,52 +43,95 @@ fMonoImg::operator bRgbImg() {
     return res;
 }
 
-//@@@ need to consider ROI
-fMonoImg::operator fCieImg() {
-    fCieImg res(GetWidth(), GetHeight());
-    fMonoPix    *p = GetData();
-    fCiePix  *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
+
+//==============================================
+// The following does not compile unfortuately
+//==============================================
+#ifdef UNDEF
+template <class inT, class InP,  class outT, class outP> inT::operator outT() {
+    outT res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        inP *p = GetRoiLine(y);
+        outP  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    return res;
+}
+#endif
+
+fMonoImg::operator fCieImg() {
+    fCieImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fMonoPix *p = GetRoiLine(y);
+        fCiePix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
-//@@@ need to consider ROI
 fMonoImg::operator fCmpImg() {
-    fCmpImg res(GetWidth(), GetHeight());
-    fMonoPix   *p = GetData();
-    fCmpPix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCmpImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fMonoPix *p = GetRoiLine(y);
+        fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
@@ -117,307 +160,358 @@ fRgbImg::operator bRgbImg() {
     return res;
 }
 
-// @@@ need to consider ROI
 fRgbImg::operator fCieImg() {
-    fCieImg res(GetWidth(), GetHeight());
-    fRgbPix *p = GetData();
-    fCiePix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCieImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fRgbPix *p = GetRoiLine(y);
+        fCiePix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
-//@@@ need to consider ROI
-
 fRgbImg::operator fCmpImg() {
-    fCmpImg  res(GetWidth(), GetHeight());
-    fRgbPix  *p = GetData();
-    fCmpPix  *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCmpImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fRgbPix *p = GetRoiLine(y);
+        fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
 
 // Cie image casting
-
-// @@@ Need to consider ROI
+//@@@ need to define pixel level casting i.o. CieY()
 fCieImg::operator fMonoImg() {
-    fMonoImg res(GetWidth(), GetHeight());
-    fCiePix *p = GetData();
-    fMonoPix   *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = (p+0)->CieY();
-        *(q+1) = (p+1)->CieY();
-        *(q+2) = (p+2)->CieY();
-        *(q+3) = (p+3)->CieY();
-        *(q+4) = (p+4)->CieY();
-        *(q+5) = (p+5)->CieY();
-        *(q+6) = (p+6)->CieY();
-        *(q+7) = (p+7)->CieY();
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = (p++)->CieY();
-        i++;
+    fMonoImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCiePix *p = GetRoiLine(y);
+        fMonoPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = (p+0)->CieY();
+            *(q+1) = (p+1)->CieY();
+            *(q+2) = (p+2)->CieY();
+            *(q+3) = (p+3)->CieY();
+            *(q+4) = (p+4)->CieY();
+            *(q+5) = (p+5)->CieY();
+            *(q+6) = (p+6)->CieY();
+            *(q+7) = (p+7)->CieY();
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = (p++)->CieY();
+            i++;
+        }
     }
     return res;
 }
 
-// @@@ need to consider ROI
+//@@@ need to define pixel level casting i.o. CieY()
 fCieImg::operator bMonoImg() {
-    bMonoImg res(GetWidth(), GetHeight());
-    fCiePix *p = GetData();
-    uint8_t *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = (p+0)->CieY();
-        *(q+1) = (p+1)->CieY();
-        *(q+2) = (p+2)->CieY();
-        *(q+3) = (p+3)->CieY();
-        *(q+4) = (p+4)->CieY();
-        *(q+5) = (p+5)->CieY();
-        *(q+6) = (p+6)->CieY();
-        *(q+7) = (p+7)->CieY();
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = (p++)->CieY();
-        i++;
+    bMonoImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCiePix *p = GetRoiLine(y);
+        bMonoPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = (p+0)->CieY();
+            *(q+1) = (p+1)->CieY();
+            *(q+2) = (p+2)->CieY();
+            *(q+3) = (p+3)->CieY();
+            *(q+4) = (p+4)->CieY();
+            *(q+5) = (p+5)->CieY();
+            *(q+6) = (p+6)->CieY();
+            *(q+7) = (p+7)->CieY();
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = (p++)->CieY();
+            i++;
+        }
     }
     return res;
 }
 
-//@@@ need to consider ROI
 fCieImg::operator bRgbImg() {
-    bRgbImg res(GetWidth(), GetHeight());
-    fCiePix *p = GetData();
-    bRgbPix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    bRgbImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCiePix *p = GetRoiLine(y);
+        bRgbPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
-// @@@ need to consider ROI
 fCieImg::operator fRgbImg() {
-    fRgbImg res(GetWidth(), GetHeight());
-    fCiePix *p = GetData();
-    fRgbPix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fRgbImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCiePix *p = GetRoiLine(y);
+        fRgbPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
-// @@@ need to consider ROI
 fCieImg::operator fCmpImg() {
-    fCmpImg res(GetWidth(), GetHeight());
-    fCiePix *p = GetData();
-    fCmpPix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCmpImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCiePix *p = GetRoiLine(y);
+        fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
 // Complex image casting
 
-// @@@ need to consider ROI
 fCmpImg::operator fMonoImg() {
-    fMonoImg res(GetWidth(), GetHeight());
-    fCmpPix *p = GetData();
-    fMonoPix   *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = (p+0)->GetNorm();
-        *(q+1) = (p+1)->GetNorm();
-        *(q+2) = (p+2)->GetNorm();
-        *(q+3) = (p+3)->GetNorm();
-        *(q+4) = (p+4)->GetNorm();
-        *(q+5) = (p+5)->GetNorm();
-        *(q+6) = (p+6)->GetNorm();
-        *(q+7) = (p+7)->GetNorm();
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = (p++)->GetNorm();
-        i++;
+    fMonoImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCmpPix *p = GetRoiLine(y);
+        fMonoPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);  
+            *(q+1) = *(p+1);   
+            *(q+2) = *(p+2);  
+            *(q+3) = *(p+3);  
+            *(q+4) = *(p+4);  
+            *(q+5) = *(p+5);  
+            *(q+6) = *(p+6); 
+            *(q+7) = *(p+7);  
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++); 
+            i++;
+        }
     }
     return res;
 }
-
-
+  
 fCmpImg::operator bMonoImg() {
-    bMonoImg res(GetWidth(), GetHeight());
-    fCmpPix  *p = GetData();
-    uint8_t  *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = (uint8_t) ((p+0)->GetNorm() + 0.5);
-        *(q+1) = (uint8_t) ((p+1)->GetNorm() + 0.5);
-        *(q+2) = (uint8_t) ((p+2)->GetNorm() + 0.5);
-        *(q+3) = (uint8_t) ((p+3)->GetNorm() + 0.5);
-        *(q+4) = (uint8_t) ((p+4)->GetNorm() + 0.5);
-        *(q+5) = (uint8_t) ((p+5)->GetNorm() + 0.5);
-        *(q+6) = (uint8_t) ((p+6)->GetNorm() + 0.5);
-        *(q+7) = (uint8_t) ((p+7)->GetNorm() + 0.5);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = (uint8_t) ((p++)->GetNorm() + 0.5);
-        i++;
+    bMonoImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCmpPix *p = GetRoiLine(y);
+        bMonoPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = (bMonoPix) *(p+0);  
+            *(q+1) = (bMonoPix) *(p+1); 
+            *(q+2) = (bMonoPix) *(p+2);   ;
+            *(q+3) = (bMonoPix) *(p+3); 
+            *(q+4) = (bMonoPix) *(p+4); 
+            *(q+5) = (bMonoPix) *(p+5);
+            *(q+6) = (bMonoPix) *(p+6); 
+            *(q+7) = (bMonoPix) *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = (bMonoPix) *(p++);
+            i++;
+        }
     }
     return res;
 }
 
 
 fCmpImg::operator bRgbImg() {
-    bRgbImg res(GetWidth(), GetHeight());
-    fCmpPix  *p = GetData();
-    bRgbPix  *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    bRgbImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCmpPix *p = GetRoiLine(y);
+        bRgbPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
 
 fCmpImg::operator fRgbImg() {
-    fRgbImg res(GetWidth(), GetHeight());
-    fCmpPix  *p = GetData();
-    fRgbPix  *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fRgbImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCmpPix *p = GetRoiLine(y);
+        fRgbPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
 fCmpImg::operator fCieImg() {
-    fCieImg res(GetWidth(), GetHeight());
-    fCmpPix  *p = GetData();
-    fCiePix  *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCieImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCmpPix *p = GetRoiLine(y);
+        fCiePix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
@@ -450,52 +544,60 @@ bMonoImg::operator bRgbImg() {
     return res;
 }
 
-// @@@ need to consider ROI
 bMonoImg::operator fCieImg() {
-    fCieImg res(GetWidth(), GetHeight());
-    uint8_t *p = GetData();
-    fCiePix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCieImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        bMonoPix *p = GetRoiLine(y);
+        fCiePix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
-// @@@ need to consider ROI
 bMonoImg::operator fCmpImg() {
-    fCmpImg res(GetWidth(), GetHeight());
-    uint8_t *p = GetData();
-    fCmpPix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCmpImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        bMonoPix *p = GetRoiLine(y);
+        fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
@@ -524,51 +626,60 @@ bRgbImg::operator fRgbImg() {
     return res;
 }
 
-//@@@ need to consider ROI
 bRgbImg::operator fCieImg() {
-    fCieImg res(GetWidth(), GetHeight());
-    bRgbPix *p = GetData();
-    fCiePix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCieImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        bRgbPix *p = GetRoiLine(y);
+        fCiePix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }
 
 bRgbImg::operator fCmpImg() {
-    fCmpImg res(GetWidth(), GetHeight());
-    bRgbPix *p = GetData();
-    fCmpPix *q = res.GetData();
-    unsigned i;
-    for(i=0; i < GetSize(); i+=8){
-        *(q+0) = *(p+0);
-        *(q+1) = *(p+1);
-        *(q+2) = *(p+2);
-        *(q+3) = *(p+3);
-        *(q+4) = *(p+4);
-        *(q+5) = *(p+5);
-        *(q+6) = *(p+6);
-        *(q+7) = *(p+7);
-        p+=8;
-        q+=8;
-    }
-    while (i < GetSize()) {
-        *(q++) = *(p++);
-        i++;
+    fCmpImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        bRgbPix *p = GetRoiLine(y);
+        fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
     }
     return res;
 }

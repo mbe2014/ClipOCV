@@ -13,6 +13,9 @@
 
 namespace clipocv {
 
+typedef uint8_t bMonoPix;
+typedef float   fMonoPix;
+
 // RGB709 to CIE XYZ system
 const float RedToX	= 0.412453F;
 const float GreenToX	= 0.357580F;

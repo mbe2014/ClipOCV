@@ -69,7 +69,10 @@ public:
     operator fRgbPix();
     operator bRgbPix();
     operator fCiePix();
+    operator bMonoPix();
+    operator fMonoPix();
     
+
     // Arithmetic operators
     // Pixel Constant reflexive operators
     

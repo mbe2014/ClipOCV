@@ -353,7 +353,7 @@ public:
     
     img_t map(T f(int x, int y, image_t<T, ocvType> *self)){
         
-        img_t res(GetWidth(), GetHeight());
+        img_t res(GetRoiWidth(), GetRoiHeight());  
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);        
         int y,x;
@@ -382,7 +382,7 @@ public:
 
     template<typename A> img_t map(T f(int x, int y, image_t<T, ocvType> *self, A arg), A arg){
         
-        img_t res(GetWidth(), GetHeight());
+        img_t res(GetRoiWidth(), GetRoiHeight());  
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);        
         int y,x;

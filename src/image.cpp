@@ -220,7 +220,6 @@ fRgbImg::operator fCmpImg() {
 
 
 // Cie image casting
-//@@@ need to define pixel level casting i.o. CieY()
 fCieImg::operator fMonoImg() {
     fMonoImg res(GetRoiWidth(), GetRoiHeight());
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
@@ -231,26 +230,25 @@ fCieImg::operator fMonoImg() {
         fMonoPix  *q = res.GetRoiLine(y);
         unsigned i;
         for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
-            *(q+0) = (p+0)->CieY();
-            *(q+1) = (p+1)->CieY();
-            *(q+2) = (p+2)->CieY();
-            *(q+3) = (p+3)->CieY();
-            *(q+4) = (p+4)->CieY();
-            *(q+5) = (p+5)->CieY();
-            *(q+6) = (p+6)->CieY();
-            *(q+7) = (p+7)->CieY();
+            *(q+0) = (fMonoPix) *(p+0);
+            *(q+1) = (fMonoPix) *(p+1);
+            *(q+2) = (fMonoPix) *(p+2);
+            *(q+3) = (fMonoPix) *(p+3);
+            *(q+4) = (fMonoPix) *(p+4);
+            *(q+5) = (fMonoPix) *(p+5);
+            *(q+6) = (fMonoPix) *(p+6);
+            *(q+7) = (fMonoPix) *(p+7);
             p+=8;
             q+=8;
         }
         while (i < GetRoiWidth()) {
-            *(q++) = (p++)->CieY();
+            *(q++) = (fMonoPix) *(p++);
             i++;
         }
     }
     return res;
 }
 
-//@@@ need to define pixel level casting i.o. CieY()
 fCieImg::operator bMonoImg() {
     bMonoImg res(GetRoiWidth(), GetRoiHeight());
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
@@ -261,19 +259,19 @@ fCieImg::operator bMonoImg() {
         bMonoPix  *q = res.GetRoiLine(y);
         unsigned i;
         for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
-            *(q+0) = (p+0)->CieY();
-            *(q+1) = (p+1)->CieY();
-            *(q+2) = (p+2)->CieY();
-            *(q+3) = (p+3)->CieY();
-            *(q+4) = (p+4)->CieY();
-            *(q+5) = (p+5)->CieY();
-            *(q+6) = (p+6)->CieY();
-            *(q+7) = (p+7)->CieY();
+            *(q+0) = (bMonoPix) *(p+0);
+            *(q+1) = (bMonoPix) *(p+1);
+            *(q+2) = (bMonoPix) *(p+2);
+            *(q+3) = (bMonoPix) *(p+3);
+            *(q+4) = (bMonoPix) *(p+4);
+            *(q+5) = (bMonoPix) *(p+5);
+            *(q+6) = (bMonoPix) *(p+6);
+            *(q+7) = (bMonoPix) *(p+7);
             p+=8;
             q+=8;
         }
         while (i < GetRoiWidth()) {
-            *(q++) = (p++)->CieY();
+            *(q++) = (bMonoPix) *(p++);
             i++;
         }
     }

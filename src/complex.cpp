@@ -29,7 +29,7 @@ fCmpImg fCmpImg::ifft()
     return res;
 }
 
-// @@@ No OpenCV equivalent?
+// No OpenCV equivalent
 fCmpImg fCmpImg::fftShift()
 {
     fCmpImg res(GetWidth(), GetHeight());

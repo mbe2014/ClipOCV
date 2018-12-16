@@ -473,15 +473,21 @@ public:
     
     
     // resize (linear interpolation) - looses origin
-    img_t Resize(const double fxy) {
+    img_t Resize(const double fxy, int itr = CV_INTER_LINEAR) {
         cv::Mat m;
-        cv::resize(roi,m,cv::Size(0,0), fxy, fxy);
+        cv::resize(roi,m,cv::Size(0,0), fxy, fxy, itr);
+        return img_t(m,false);
+    }
+
+    img_t Resize(const double fx, double fy, int itr = CV_INTER_LINEAR) {
+        cv::Mat m;
+        cv::resize(roi,m,cv::Size(0,0), fx, fy, itr);
         return img_t(m,false);
     }
     
-    img_t Resize(const unsigned w, const unsigned h) {
+    img_t Resize(const unsigned w, const unsigned h, int itr = CV_INTER_LINEAR) {
         cv::Mat m;
-        cv::resize(roi,m,cv::Size(w,h));
+        cv::resize(roi,m,cv::Size(w,h), 0.0, 0.0, itr);
         return img_t(m,false);
     }
 

@@ -34,13 +34,13 @@ namespace clipocv {
 
 // Kernel images are used for convolution
 // they limited version of img_t
+// Kernel currently do no expose or use the ROI
+// although the option exist
 
 class fKernel : public image_t<float, CV_32FC1> {
     
 protected:
     using image_t<float, CV_32FC1>::mat;
-    using image_t<float, CV_32FC1>::width;
-    using image_t<float, CV_32FC1>::height;
     
 public:
     using image_t<float, CV_32FC1>::GetWidth;
@@ -66,7 +66,7 @@ public:
     // kernel to kernel convolution
     // extrapolation: 0 outside suppot
     fKernel operator*(const fKernel &ker){
-        fKernel res(width, height);
+        fKernel res(GetWidth(), GetHeight());
         cv::Mat flipKer;
         cv::flip(ker.mat, flipKer, -1); // opencv 2D filter is correlation
         cv::filter2D(mat,res.mat,-1,flipKer, cv::Point(-1,-1), 0, cv::BORDER_CONSTANT);
@@ -109,17 +109,24 @@ template<class T, int ocvType> class img_t : public image_t<T, ocvType> {
     
 protected:    
     using image_t<T, ocvType>::mat;
-    using image_t<T, ocvType>::width;
-    using image_t<T, ocvType>::height;
+    using image_t<T, ocvType>::roi;
     using image_t<T, ocvType>::orgX;
     using image_t<T, ocvType>::orgY;
+    using image_t<T, ocvType>::roiX;
+    using image_t<T, ocvType>::roiY;
     using image_t<T, ocvType>::pix;
 
 public:
     using image_t<T, ocvType>::GetWidth;
     using image_t<T, ocvType>::GetHeight;
+    using image_t<T, ocvType>::GetRoiWidth;
+    using image_t<T, ocvType>::GetRoiHeight;
     using image_t<T, ocvType>::GetSize;
+    using image_t<T, ocvType>::GetRoiSize;
     using image_t<T, ocvType>::GetData;
+    using image_t<T, ocvType>::GetLine;
+    using image_t<T, ocvType>::GetRoiData;
+    using image_t<T, ocvType>::GetRoiLine;
     using image_t<T, ocvType>::GetXmin;
     using image_t<T, ocvType>::GetYmin;
     using image_t<T, ocvType>::GetXmax;
@@ -136,58 +143,60 @@ public:
     }
     
     img_t &operator+=(const T val){
-        mat += val;
+        roi += val;
         return *this;
     }
     
     img_t &operator-=(const T val){
-        mat -= val;
+        roi -= val;
         return *this;
     }
     
     img_t &operator*=(const T val){
-        //mat *= val;  // @@@ OpenCV does not overload *= operator
-        multiply(mat,cv::Scalar(val),mat);
+        //mat *= val;  // OpenCV does not overload *= operator
+        multiply(roi,cv::Scalar(val),roi);
         return *this;
     }
     
     img_t &operator/=(const T val){
-        // mat /= val; // @@@ OpenCV does not overload /= operator
-        divide(mat,cv::Scalar(val),mat);
+        // mat /= val; // OpenCV does not overload /= operator
+        divide(roi,cv::Scalar(val),roi);
         return *this;
     }
     
     // -- non reflexive Image scalar operators
-    
-    // need to define friend functions. @@@ why?
-    // friend img_t &operator+<T>(const T &val, const img_t &img){
-    //    img.operator+(val);
-    // }
-    
-    
+       
     img_t operator+(const T val){
-        img_t res(width, height, orgX, orgY);
-        res.mat = mat + val;
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
+        res.roi = roi + val;
         return res;
     }
     
     img_t operator-(const T val){
-        img_t res(width, height, orgX, orgY);
-        res.mat = mat - val;
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
+        res.roi = roi - val;
         return res;
     }
     
     img_t operator*(const T val){
-        img_t res(width, height, orgX, orgY);
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
         // res.mat = mat * val; // OpenCV does not overload the * operator
-        multiply(mat,cv::Scalar(val),res.mat);
+        multiply(roi,cv::Scalar(val),res.roi);
         return res;
     }
     
     img_t operator/(const T val){
-        img_t res(width, height, orgX, orgY);
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
         //res.mat = mat / val; // OpenCV does not overload the / operator
-        divide(mat,cv::Scalar(val),res.mat);
+        divide(roi,cv::Scalar(val),res.roi);
         return res;
     }
     
@@ -199,72 +208,82 @@ public:
     }
     
     img_t &operator+=(const img_t &img){
-        assert(width == img.width && height == img.height);
-        mat += img.mat;
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
+        roi += img.roi;
         return *this;
     }
     
     img_t &operator-=(const img_t &img){
-        assert(width == img.width && height == img.height);
-        mat -= img.mat;
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
+        roi -= img.roi;
         return *this;
     }
     
     img_t &operator*=(const img_t &img){
-        assert(width == img.width && height == img.height);
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
         //mat *= img.mat;  // this is matrix multiplication not what we want here
-        multiply(mat,img.mat,mat);
+        multiply(roi,img.roi,roi);
         return *this;
     }
     
     img_t &operator/=(const img_t &img){
-        assert(width == img.width && height == img.height);
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
         //mat /= img.mat;
-        divide(mat,img.mat,mat);
+        divide(roi,img.roi,roi);
         return *this;
     }
-    
+
     // -- non reflexive Image <-> Image operators--
     // OpenCV doe not overload non reflexive ops
     
     img_t operator+(const img_t &img){
-        assert(width == img.width && height == img.height);
-        img_t res(width, height, orgX, orgY);
-        res.mat = mat + img.mat;
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
+        res.roi = roi + img.roi;
         return res;
     }
     
     img_t operator-(const img_t &img){
-        assert(width == img.width && height == img.height);
-        img_t res(width, height, orgX, orgY);
-        res.mat = mat - img.mat;
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
+        res.roi = roi - img.roi;
         return res;
     }
     
     img_t operator*(const img_t &img){
-        assert(width == img.width && height == img.height);
-        img_t res(width, height, orgX, orgY);
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
         // res/mat = mat * img.mat
-        multiply(mat,img.mat,res.mat);
+        multiply(roi,img.roi,res.roi);
         return res;
     }
     
     img_t operator/(const img_t &img){
-        assert(width == img.width && height == img.height);
-        img_t res(width, height, orgX, orgY);
+        assert(GetRoiWidth() == img.GetRoiWidth() && GetRoiHeight() == img.GetRoiHeight());
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
         //res.mat = mat / img.mat
-        divide(mat,img.mat,res.mat);
+        divide(roi,img.roi,res.roi);
         return res;
     }
-    
+
     // convolution image kernel
     // border is replicated (prevents discontinuity)
     
     img_t operator*(const fKernel &ker){
-        img_t res(width, height, orgX, orgY);
+        img_t res(GetRoiWidth(), GetRoiHeight());
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
         cv::Mat flipKer;
         flip(ker.GetMat(), flipKer, -1); // opencv 2D filter is correlation
-        filter2D(mat,res.GetMat(),-1,flipKer, cv::Point(-1,-1), 0, cv::BORDER_REPLICATE);
+        filter2D(mat,res.roi,-1,flipKer, cv::Point(-1,-1), 0, cv::BORDER_REPLICATE);
         return res;
     }
     
@@ -272,51 +291,59 @@ public:
     // ---unary operators---
     
     // Map functions.
-    // @@@ need to consider ROI
     img_t map(T f(T x)){
-        img_t res(width, height, orgX, orgY);
-        unsigned i;
-        T *p = GetData();
-        T *q = res.GetData();
-        for (i = 0 ; i < GetSize()-8 ; i+=8) {
-            *(q+0) = f(*(p+0));
-            *(q+1) = f(*(p+1));
-            *(q+2) = f(*(p+2));
-            *(q+3) = f(*(p+3));
-            *(q+4) = f(*(p+4));
-            *(q+5) = f(*(p+5));
-            *(q+6) = f(*(p+6));
-            *(q+7) = f(*(p+7));
-            p+=8;
-            q+=8;
-        }
-        while(i<GetSize()) {
-            *(q++) = f(*(p++));
-            i++;
+        img_t res(GetRoiWidth(), GetRoiHeight());  
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
+
+        for (int y=0; y<res.GetRoiHeight(); y++) {
+            T *p = GetRoiLine(y);
+            T *q = res.GetRoiLine(y);
+            unsigned i;
+            for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+                *(q+0) = f(*(p+0));
+                *(q+1) = f(*(p+1));
+                *(q+2) = f(*(p+2));
+                *(q+3) = f(*(p+3));
+                *(q+4) = f(*(p+4));
+                *(q+5) = f(*(p+5));
+                *(q+6) = f(*(p+6));
+                *(q+7) = f(*(p+7));
+                p+=8;
+                q+=8;
+            }
+            while(i<GetRoiWidth()) {
+                *(q++) = f(*(p++));
+                i++;
+            }
         }
         return res;
     }
     
     template<typename A> img_t map(T f(T x, A arg), A arg){
-        img_t res(width, height, orgX, orgY);
-        unsigned i;
-        T *p = GetData();
-        T *q = res.GetData();
-        for (i = 0 ; i < GetSize()-8 ; i+=8) {
-            *(q+0) = f(*(p+0), arg);
-            *(q+1) = f(*(p+1), arg);
-            *(q+2) = f(*(p+2), arg);
-            *(q+3) = f(*(p+3), arg);
-            *(q+4) = f(*(p+4), arg);
-            *(q+5) = f(*(p+5), arg);
-            *(q+6) = f(*(p+6), arg);
-            *(q+7) = f(*(p+7), arg);
-            p+=8;
-            q+=8;
-        }
-        while(i<GetSize()) {
-            *(q++) = f(*(p++), arg);
-            i++;
+        img_t res(GetRoiWidth(), GetRoiHeight());  
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);
+        for (int y=0; y<res.GetRoiHeight(); y++) {
+            T *p = GetRoiLine(y);
+            T *q = res.GetRoiLine(y);
+            unsigned i;
+            for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+                *(q+0) = f(*(p+0), arg);
+                *(q+1) = f(*(p+1), arg);
+                *(q+2) = f(*(p+2), arg);
+                *(q+3) = f(*(p+3), arg);
+                *(q+4) = f(*(p+4), arg);
+                *(q+5) = f(*(p+5), arg);
+                *(q+6) = f(*(p+6), arg);
+                *(q+7) = f(*(p+7), arg);
+                p+=8;
+                q+=8;
+            }
+            while(i<GetRoiWidth()) {
+                *(q++) = f(*(p++), arg);
+                i++;
+            }
         }
         return res;
     }
@@ -324,16 +351,16 @@ public:
     
     // map with image data self (this) pointer
     
-    //@@@ need to consider ROI
     img_t map(T f(int x, int y, image_t<T, ocvType> *self)){
         
-        img_t res(width, height, orgX, orgY);
-        
+        img_t res(GetRoiWidth(), GetRoiHeight());  
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);        
         int y,x;
-        for (y = GetYmin() ; y <= GetYmax() ; y++){
+        for (y = res.GetYmin() ; y <= res.GetYmax() ; y++){
             T *p = &Pix(GetXmin(),y);
             T *q = &res.Pix(res.GetXmin(),y);
-            for (x = GetXmin() ; x <= GetXmax()-8 ; x+=8){
+            for (x = res.GetXmin() ; x <= res.GetXmax()-8 ; x+=8){
                 *(q+0) = f(x+0,y, this);
                 *(q+1) = f(x+1,y, this);
                 *(q+2) = f(x+2,y, this);
@@ -353,16 +380,16 @@ public:
         return res;
     }
 
-    //@@@ need to consider ROI
     template<typename A> img_t map(T f(int x, int y, image_t<T, ocvType> *self, A arg), A arg){
         
-        img_t res(width, height, orgX, orgY);
-        
+        img_t res(GetRoiWidth(), GetRoiHeight());  
+        res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+        res.SetOrigin(orgX, orgY);        
         int y,x;
-        for (y = GetYmin() ; y <= GetYmax() ; y++){
+        for (y = res.GetYmin() ; y <= res.GetYmax() ; y++){
             T *p = &Pix(GetXmin(),y);
             T *q = &res.Pix(res.GetXmin(),y);
-            for (x = GetXmin() ; x <= GetXmax()-8 ; x+=8){
+            for (x = res.GetXmin() ; x <= res.GetXmax()-8 ; x+=8){
                 *(q+0) = f(x+0,y, this, arg);
                 *(q+1) = f(x+1,y, this, arg);
                 *(q+2) = f(x+2,y, this, arg);
@@ -385,14 +412,17 @@ public:
     // inverse.
     // inverse of unsigned is the complement. 
     img_t operator-(){
+            img_t res(GetRoiWidth(), GetRoiHeight());
+            res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+            res.SetOrigin(orgX, orgY);       
             if (ocvType == CV_8UC1 || ocvType == CV_8UC3) {
-                mat = cv::Scalar::all(255) - mat;
-                return *this;
+                res.roi = cv::Scalar::all(255) - roi;
+                return res;
             }
-            return (*this * (T)(-1));
+            cv::multiply(roi,cv::Scalar::all(-1), res.roi);
+            return res;
     }
     
-    //@@@ need to add flip / transpose / rot 90 180
     
     // Derivatives.
     img_t dx(const uint8_t filt_len = 5) {
@@ -442,16 +472,22 @@ public:
     }
     
     
-    // resize (linear interpolation)
-    img_t Resize(const double fxy) {
+    // resize (linear interpolation) - looses origin
+    img_t Resize(const double fxy, int itr = CV_INTER_LINEAR) {
         cv::Mat m;
-        cv::resize(this->GetMat(),m,cv::Size(0,0), fxy, fxy);
+        cv::resize(roi,m,cv::Size(0,0), fxy, fxy, itr);
+        return img_t(m,false);
+    }
+
+    img_t Resize(const double fx, double fy, int itr = CV_INTER_LINEAR) {
+        cv::Mat m;
+        cv::resize(roi,m,cv::Size(0,0), fx, fy, itr);
         return img_t(m,false);
     }
     
-    img_t Resize(const unsigned w, const unsigned h) {
+    img_t Resize(const unsigned w, const unsigned h, int itr = CV_INTER_LINEAR) {
         cv::Mat m;
-        cv::resize(this->GetMat(),m,cv::Size(w,h));
+        cv::resize(roi,m,cv::Size(w,h), 0.0, 0.0, itr);
         return img_t(m,false);
     }
 

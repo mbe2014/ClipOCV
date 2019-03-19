@@ -17,6 +17,8 @@ add_executable(warp warp.cpp)
 add_executable(invert invert.cpp)
 add_executable(blend blend.cpp)
 add_executable(fft fft.cpp)
+add_executable(roi1 roi1.cpp)
+add_executable(roi2 roi2.cpp)
 
 include_directories(../src)
 
@@ -104,3 +106,14 @@ target_link_libraries(fft
   ${PROJECT_NAME}
   ${OpenCV_LIBS}
 )
+
+target_link_libraries(roi1
+  ${PROJECT_NAME}
+  ${OpenCV_LIBS}
+)
+
+target_link_libraries(roi2
+  ${PROJECT_NAME}
+  ${OpenCV_LIBS}
+)
+

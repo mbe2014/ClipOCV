@@ -60,6 +60,18 @@ fCiePix::operator fCmpPix() {
     return tmp;
 }
 
+fCiePix::operator bMonoPix() {
+    bMonoPix tmp;
+    tmp = (bMonoPix) (CieY()+ 0.5);
+    return tmp;
+}
+
+fCiePix::operator fMonoPix() {
+    fMonoPix tmp;
+    tmp = CieY();
+    return tmp;
+}
+
 //======= fRgbPix =========
 
 fRgbPix &fRgbPix::operator=(const fCiePix &pix){
@@ -189,6 +201,19 @@ fCmpPix::operator bRgbPix() {
     tmp = *this;
     return tmp;
 }
+
+fCmpPix::operator bMonoPix() {
+    bMonoPix tmp;
+    tmp = (bMonoPix) (GetNorm() + 0.5);
+    return tmp;
+}
+
+fCmpPix::operator fMonoPix() {
+    fMonoPix tmp;
+    tmp = (fMonoPix) (GetNorm() + 0.5);
+    return tmp;
+}
+
 
 } // namepsace
 

@@ -17,4 +17,6 @@ ln -s ../example/lena.ppm .
 ./togray < lena.ppm > gray.ppm ; 	display gray.ppm
 ./togray1 < lena.ppm > gray1.ppm ; 	display gray1.ppm
 ./warp < lena.ppm > warp.ppm ; 		display warp.ppm
+./roi1 < lena.ppm > roi1.ppm ;		display roi1.ppm
+./roi2  > roi2.ppm ;			display roi2.ppm
 

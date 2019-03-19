@@ -31,7 +31,7 @@
 *.out
 *.app
 
-# build and testdir - just in case
+# build and test dir - just in case
 build
 testdir
 

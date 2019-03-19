@@ -77,6 +77,8 @@ public:
     operator fRgbPix();
     operator bRgbPix();  
     operator fCmpPix();
+    operator bMonoPix();
+    operator fMonoPix();
     
     // Pixel Constant reflexive operators
     // Rgb->Cie is linear therefore the semantice of the following operators

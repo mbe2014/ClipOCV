@@ -97,7 +97,7 @@ public:
     // coordinates are alwase absolute coordinate of the image.
     void SetRoi(const unsigned x, const unsigned y, const unsigned w, const unsigned h){
         assert (x < GetWidth() && y < GetHeight());
-        assert (x+w < GetWidth() && y+h < GetHeight());
+        assert (x+w <= GetWidth() && y+h <= GetHeight());
 
         roi = mat(cv::Rect(x,y, w,h));
         roiX = x;

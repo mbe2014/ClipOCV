@@ -2,7 +2,7 @@
 rm -rf testdir
 mkdir testdir
 cd testdir
-ln -s ../build/release/example/* .
+ln -s ../build/debug/example/* .
 ln -s ../example/lena.ppm .
 
 ./display < lena.ppm 

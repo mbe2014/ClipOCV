@@ -1,15 +1,17 @@
 
-# ClipOCV
+# Typed
 
 Quick links:
 1. [About](#about)
 2. [Installation](#installation)
-3. [Link to Documentation](https://ben-ezra.org/ClipOCV/html)
+3. [Link to Documentation](https://ben-ezra.org/TYPED/html)
 
 ## About 
-CLIP, (C++ Library for Image Processing) was a simple C++ library written at the Hebrew University of Jerusalem at the late 1990s 
+*TYPED* defines an *interface* for image processing that is based on explicity typed object. This means, for example, that the *compiler* knows that an object is an image of a specific color space and can *act* upon this knowledge. To lean more about typed objects and why you should care about them (or not, it depends on your application) please follow this link: (TO BE ADDDED)   
 
-ClipOCV is an implementation of the CLIP interface over OpenCV, where ClipOCV is now mostly (but not entirely) a wrapper over OpenCV.
+*TYPED* origins are small and simple C++ library named CLIP, (C++ Library for Image Processing) written at the Hebrew University of Jerusalem at the late 1990s to help wth research project.  
+
+Type is an implementation of the CLIP interface over OpenCV, where ClipOCV is now mostly (but not entirely) a wrapper over OpenCV.
 OpenCV can be used directly wherever ClipOCV interface is not (yet) available. 
 
 ClipOCV has several features that make it (or so I believe), elegant and very comfortable to use

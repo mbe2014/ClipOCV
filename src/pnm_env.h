@@ -136,20 +136,20 @@ public:
                     tmp.Pix(i) =  *fltp++;
                 break;
                 
-            case PPM: // byte rgb - get Y component on CIE XYZ system.
+            case PPM: // byte rgb - get Y component on YUV space.
                 chrp = (uint8_t *) pnm_img->data;
                 for(i=0; i<tmp.GetSize(); i++, chrp+=3)
-                    tmp.Pix(i) = (float)*chrp     * RedToY   + // red
-                    (float)*(chrp+1) * GreenToY + // green;
-                    (float)*(chrp+2) * BlueToY;   // blue
+                    tmp.Pix(i) = (float)*chrp     * RGB2YUV[0] + // red
+                                 (float)*(chrp+1) * RGB2YUV[1] + // green;
+                                 (float)*(chrp+2) * RGB2YUV[2] ; // blue
                 break;
                 
-            case PCM: // float rgb - get Y component on CIE XYZ system.
+            case PCM: // float rgb - get Y component on YUV space.
                 fltp = (float *) pnm_img->data;
                 for(i=0; i<tmp.GetSize(); i++, fltp+=3)
-                    tmp.Pix(i) = *fltp     * RedToY   + // red
-                    *(fltp+1) * GreenToY + // green;
-                    *(fltp+2) * BlueToY;   // blue
+                    tmp.Pix(i) = *fltp     * RGB2YUV[0] + // red
+                                 *(fltp+1) * RGB2YUV[1] + // green;
+                                 *(fltp+2) * RGB2YUV[2] ; // blue
                 break;
                 
             default :
@@ -275,20 +275,20 @@ public:
                     tmp.Pix(i) =  *fltp++;
                 break;
                 
-            case PPM: // byte rgb - get Y component on CIE XYZ system.
+            case PPM: // byte rgb - get Y component on YUV space.
                 chrp = (uint8_t *) pnm_img->data;
                 for(i=0; i<tmp.GetSize(); i++, chrp+=3)
-                    tmp.Pix(i) = (float)*chrp     * RedToY   + // red
-                    (float)*(chrp+1) * GreenToY + // green;
-                    (float)*(chrp+2) * BlueToY;   // blue
+                    tmp.Pix(i) = (float)*chrp     * RGB2YUV[0] + // red
+                                 (float)*(chrp+1) * RGB2YUV[1] + // green;
+                                 (float)*(chrp+2) * RGB2YUV[2] ; // blue
                 break;
                 
-            case PCM: // float rgb - get Y component on CIE XYZ system.
+            case PCM: // float rgb - get Y component onYUV space.
                 fltp = (float *) pnm_img->data;
                 for(i=0; i<tmp.GetSize(); i++, fltp+=3)
-                    tmp.Pix(i) = *fltp     * RedToY   + // red
-                    *(fltp+1) * GreenToY + // green;
-                    *(fltp+2) * BlueToY;   // blue
+                    tmp.Pix(i) = *fltp     * RGB2YUV[0] + // red
+                                 *(fltp+1) * RGB2YUV[0] + // green;
+                                 *(fltp+2) * RGB2YUV[0] ; // blue
                 break;
                 
             default :
@@ -324,22 +324,22 @@ public:
                     tmp.Pix(i) =  (uint8_t) (*fltp++ + 0.5);
                 break;
                 
-            case PPM: // byte rgb - get Y component on CIE XYZ system.
+            case PPM: // byte rgb - get Y component on YUV space.
                 chrp = (uint8_t *) pnm_img->data;
                 for(i=0; i<tmp.GetSize(); i++, chrp+=3)
                     tmp.Pix(i) = (uint8_t)
-                    ((float)* chrp    * RedToY   + // red
-                     (float)*(chrp+1) * GreenToY + // green;
-                     (float)*(chrp+2) * BlueToY);   // blue
+                    ((float)* chrp    * RGB2YUV[0]  + // red
+                     (float)*(chrp+1) * RGB2YUV[1]  + // green;
+                     (float)*(chrp+2) * RGB2YUV[2] );   // blue
                 break;
                 
-            case PCM: // float rgb - get Y component on CIE XYZ system.
+            case PCM: // float rgb - get Y component on YUV space.
                 fltp = (float *) pnm_img->data;
                 for(i=0; i<tmp.GetSize(); i++, fltp+=3)
                     tmp.Pix(i) = (uint8_t)
-                    (* fltp    * RedToY   + // red
-                     *(fltp+1) * GreenToY + // green;
-                     *(fltp+2) * BlueToY);   // blue
+                    (* fltp    * RGB2YUV[0]    + // red
+                     *(fltp+1) * RGB2YUV[1]  + // green;
+                     *(fltp+2) * RGB2YUV[2] );   // blue
                 break;
                 
             default :

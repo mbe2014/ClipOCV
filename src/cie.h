@@ -5,7 +5,7 @@
 //
 // Description:
 //
-// fRgbPix  - cie color space pixel class
+// fCiePix  - cie color space pixel class
 // Cie is memory only data type.
 //
 //============================================================
@@ -25,6 +25,7 @@ const unsigned CIE_Z = 2;
 class fRgbPix;
 class bRgbPix;
 class fCmpPix;
+class fYuvPix;
 
 class fCiePix : public cv::Vec3f {
     
@@ -37,28 +38,45 @@ public:
     const float &CieZ() const {return operator[](CIE_Z);}
     
     float GetRed() const {
-        return	CieX() * XtoRed	 +
-      		    CieY() * YtoRed  +
-                CieZ() * ZtoRed;
+        return	CieX() * XYZ2RGB[0] +
+      		    CieY() * XYZ2RGB[1] +
+                CieZ() * XYZ2RGB[2] ;
     }
     float GetGreen() const {
-        return	CieX() * XtoGreen +
-      		    CieY() * YtoGreen +
-                CieZ() * ZtoGreen;
+        return	CieX() * XYZ2RGB[3] +
+      		    CieY() * XYZ2RGB[4] +
+                CieZ() * XYZ2RGB[5] ;
     }
     float GetBlue() const {
-        return	CieX() * XtoBlue  +
-      		    CieY() * YtoBlue  +
-                CieZ() * ZtoBlue;
+        return	CieX() * XYZ2RGB[6]  +
+      		    CieY() * XYZ2RGB[7]  +
+                CieZ() * XYZ2RGB[8] ;
     }
     
-    
+    float GetYuvY() const {
+        return	CieX() * XYZ2YUV[0] +
+      		    CieY() * XYZ2YUV[1] +
+                CieZ() * XYZ2YUV[2] ;
+    }
+    float GetYuvU() const {
+        return	CieX() * XYZ2YUV[3] +
+      		    CieY() * XYZ2YUV[4] +
+                CieZ() * XYZ2YUV[5] ;
+    }
+    float GetYuvV() const {
+        return	CieX() * XYZ2YUV[6]  +
+      		    CieY() * XYZ2YUV[7]  +
+                CieZ() * XYZ2YUV[8] ;
+    }
+
+
+
     // assign and cast operators.
     
-    fCiePix &operator=(const float v){	// float level
-        CieX() = v;
-        CieY() = v;
-        CieZ() = v;
+    fCiePix &operator=(const float v){
+        CieX() = v * (RGB2XYZ[0] + RGB2XYZ[1] + RGB2XYZ[2]);
+        CieY() = v * (RGB2XYZ[3] + RGB2XYZ[4] + RGB2XYZ[5]);
+        CieZ() = v * (RGB2XYZ[6] + RGB2XYZ[7] + RGB2XYZ[8]);
         return *this;
     }
     
@@ -72,6 +90,7 @@ public:
     fCiePix &operator=(const fRgbPix &pix);
     fCiePix &operator=(const bRgbPix &pix);
     fCiePix &operator=(const fCmpPix &pix);
+    fCiePix &operator=(const fYuvPix &pix);
     
     // casting operators
     operator fRgbPix();
@@ -79,22 +98,22 @@ public:
     operator fCmpPix();
     operator bMonoPix();
     operator fMonoPix();
+    operator fYuvPix();
     
     // Pixel Constant reflexive operators
-    // Rgb->Cie is linear therefore the semantice of the following operators
     // agrees with the RGB semantics.
     
     fCiePix &operator+= (const float c){
-        CieX() += c;
-        CieY() += c;
-        CieZ() += c;
+        CieX() += c * (RGB2XYZ[0] + RGB2XYZ[1] + RGB2XYZ[2]);
+        CieY() += c * (RGB2XYZ[3] + RGB2XYZ[4] + RGB2XYZ[5]);
+        CieZ() += c * (RGB2XYZ[6] + RGB2XYZ[7] + RGB2XYZ[8]);
         return *this;
     }
     
     fCiePix &operator-= (const float c){
-        CieX() -= c;
-        CieY() -= c;
-        CieZ() -= c;
+        CieX() -= c * (RGB2XYZ[0] + RGB2XYZ[1] + RGB2XYZ[2]);
+        CieY() -= c * (RGB2XYZ[3] + RGB2XYZ[4] + RGB2XYZ[5]);
+        CieZ() -= c * (RGB2XYZ[6] + RGB2XYZ[7] + RGB2XYZ[8]);
         return *this;
     }
     

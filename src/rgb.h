@@ -25,6 +25,7 @@ const uint8_t BLUE  = 2;
 class fCiePix;
 class bRgbPix;
 class fCmpPix;
+class fYuvPix;
 
 class fRgbPix : public cv::Vec3f {
     
@@ -37,21 +38,36 @@ public:
     const float &Blue() const {return operator[](BLUE);}
     
     float GetCieX() const {
-        return	Red()   * RedToX   +
-                Green() * GreenToX +
-                Blue()  * BlueToX;
+        return	Red()   * RGB2XYZ[0]   +
+                Green() * RGB2XYZ[1] +
+                Blue()  * RGB2XYZ[2];
     }
     float GetCieY() const {
-        return	Red()   * RedToY   +
-                Green() * GreenToY +
-                Blue()  * BlueToY;
+        return	Red()   * RGB2XYZ[3]   +
+                Green() * RGB2XYZ[4] +
+                Blue()  * RGB2XYZ[5];
     }
     float GetCieZ() const {
-        return	Red()   * RedToZ   +
-                Green() * GreenToZ +
-                Blue()  * BlueToZ;
+        return	Red()   * RGB2XYZ[6]  +
+                Green() * RGB2XYZ[7] +
+                Blue()  * RGB2XYZ[8];
     }
     
+    float GetYuvY() const {
+        return	Red()   * RGB2YUV[0]   +
+                Green() * RGB2YUV[1] +
+                Blue()  * RGB2YUV[2];
+    }
+    float GetYuvU() const {
+        return	Red()   * RGB2YUV[3]   +
+                Green() * RGB2YUV[4] +
+                Blue()  * RGB2YUV[5];
+    }
+    float GetYuvV() const {
+        return	Red()   * RGB2YUV[6]  +
+                Green() * RGB2YUV[7] +
+                Blue()  * RGB2YUV[8];
+    }
     
     // assign and cast operators.
     
@@ -73,10 +89,12 @@ public:
     fRgbPix &operator=(const bRgbPix &pix);
     fRgbPix &operator=(const fCiePix &pix);
     fRgbPix &operator=(const fCmpPix &pix);
+    fRgbPix &operator=(const fYuvPix &pix);
     
     
     // casting operators
     operator fCiePix();
+    operator fYuvPix();
     operator bRgbPix();
     operator fCmpPix();
     
@@ -265,21 +283,36 @@ public:
     const uint8_t &Blue() const {return operator[](BLUE);}
     
     float GetCieX() const {
-        return	(float) Red()   * RedToX   +
-        (float) Green() * GreenToX +
-        (float) Blue()  * BlueToX;
+        return	(float) Red()   * RGB2XYZ[0] +
+                (float) Green() * RGB2XYZ[1] +
+                (float) Blue()  * RGB2XYZ[2];
     }
     float GetCieY() const {
-        return	(float) Red()   * RedToY   +
-        (float) Green() * GreenToY +
-        (float) Blue()  * BlueToY;
+        return	(float) Red()   * RGB2XYZ[3] +
+                (float) Green() * RGB2XYZ[4] +
+                (float) Blue()  * RGB2XYZ[5];
     }
     float GetCieZ() const {
-        return	(float) Red()   * RedToZ   +
-        (float) Green() * GreenToZ +
-        (float) Blue()  * BlueToY;
+        return	(float) Red()   * RGB2XYZ[6] +
+                (float) Green() * RGB2XYZ[7] +
+                (float) Blue()  * RGB2XYZ[8];
     }
     
+    float GetYuvY() const {
+        return	(float) Red()   * RGB2YUV[0]   +
+                (float) Green() * RGB2YUV[1] +
+                (float) Blue()  * RGB2YUV[2];
+    }
+    float GetYuvU() const {
+        return	(float) Red()   * RGB2YUV[3]   +
+                (float) Green() * RGB2YUV[4] +
+                (float) Blue()  * RGB2YUV[5];
+    }
+    float GetYuvV() const {
+        return	(float) Red()   * RGB2YUV[6]  +
+                (float) Green() * RGB2YUV[7] +
+                (float) Blue()  * RGB2YUV[8];
+    }
     
     // assign and cast operators.
     
@@ -300,11 +333,13 @@ public:
     
     bRgbPix &operator=(const fRgbPix &pix);
     bRgbPix &operator=(const fCiePix &pix);
+    bRgbPix &operator=(const fYuvPix &pix);
     bRgbPix &operator=(const fCmpPix &pix);
     
     
     // casting operators
     operator fCiePix();
+    operator fYuvPix();
     operator fRgbPix();
     operator fCmpPix();
     

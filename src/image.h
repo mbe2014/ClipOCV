@@ -20,6 +20,7 @@
 #include "rgb.h"
 #include "cie.h"
 #include "complex.h"
+#include "yuv.h"
 #include "color.h"
 #include "img_op.h"
 
@@ -50,6 +51,7 @@ class bRgbImg;
 
 class fCieImg;
 class fCmpImg;
+class fYuvImg;
 
 class fKernel;
 
@@ -85,6 +87,7 @@ public:
     operator bRgbImg();
     operator fCieImg();
     operator fCmpImg();
+    operator fYuvImg();
     
     // operators
     fMonoImg &operator=(const fMonoPix val){
@@ -216,7 +219,8 @@ public:
     operator bRgbImg() ;
     operator fCieImg() ;
     operator fCmpImg();
-
+    operator fYuvImg();
+ 
     
     // operators
     fRgbImg &operator=(const fRgbPix &val){
@@ -352,7 +356,8 @@ public:
     operator bRgbImg();
     operator fCieImg();
     operator fCmpImg();
-
+    operator fYuvImg();
+ 
     
     // operators
     bMonoImg &operator=(const bMonoPix val){
@@ -480,7 +485,8 @@ public:
     operator fRgbImg() ;
     operator fCieImg() ;
     operator fCmpImg();
-
+    operator fYuvImg();
+ 
     
     // operators
     bRgbImg &operator=(const bRgbPix &val){
@@ -598,9 +604,6 @@ public:
     }
 };
 
-
-
-
 class fCieImg : public img_t<fCiePix, CV_32FC3>{
     
 public:
@@ -613,7 +616,8 @@ public:
     operator fRgbImg() ;
     operator bRgbImg();
     operator fCmpImg();
-
+    operator fYuvImg();
+ 
     
     // operators
     fCieImg &operator=(const fCiePix &val){
@@ -741,7 +745,8 @@ public:
     operator fRgbImg() ;
     operator bRgbImg() ;
     operator fCieImg() ;
-    
+    operator fYuvImg();
+ 
     // operators
     fCmpImg &operator=(const fCmpPix &val){
         img_t<fCmpPix, CV_32FC2>::operator=(val);
@@ -862,6 +867,140 @@ public:
         return *this;
     }
 };
+
+
+// YUV image
+
+class fYuvImg : public img_t<fYuvPix, CV_32FC3>{
+    
+public:
+    
+    //operatores
+    
+    // casting
+    operator fMonoImg() ;
+    operator bMonoImg();
+    operator fRgbImg() ;
+    operator bRgbImg();
+    operator fCmpImg();
+    operator fCieImg();
+ 
+    
+    // operators
+    fYuvImg &operator=(const fYuvPix &val){
+        img_t<fYuvPix, CV_32FC3>::operator=(val);
+        return *this;
+    }
+    fYuvImg &operator+=(const fYuvPix &val){
+        img_t<fYuvPix, CV_32FC3>::operator+=(val);
+        return *this;
+    }
+    fYuvImg &operator-=(const fYuvPix &val){
+        img_t<fYuvPix, CV_32FC3>::operator-=(val);
+        return *this;
+    }
+    fYuvImg &operator*=(const fYuvPix &val){
+        img_t<fYuvPix, CV_32FC3>::operator*=(val);
+        return *this;
+    }
+    fYuvImg &operator/=(const fYuvPix &val){
+        img_t<fYuvPix, CV_32FC3>::operator/=(val);
+        return *this;
+    }
+    fYuvImg operator+(const fYuvPix &val){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator+(val);
+    }
+    fYuvImg operator-(const fYuvPix &val){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator-(val);
+    }
+    fYuvImg operator*(const fYuvPix &val){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator*(val);
+    }
+    fYuvImg operator/(const fYuvPix &val){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator/(val);
+    }
+    fYuvImg &operator=(const fYuvImg &img){
+        img_t<fYuvPix, CV_32FC3>::operator=(img);
+        return *this;
+    }
+    fYuvImg &operator+=(const fYuvImg &img){
+        img_t<fYuvPix, CV_32FC3>::operator+=(img);
+        return *this;
+    }
+    fYuvImg &operator-=(const fYuvImg &img){
+        img_t<fYuvPix, CV_32FC3>::operator-=(img);
+        return *this;
+    }
+    fYuvImg &operator*=(const fYuvImg &img){
+        img_t<fYuvPix, CV_32FC3>::operator*=(img);
+        return *this;
+    }
+    fYuvImg &operator/=(const fYuvImg &img){
+        img_t<fYuvPix, CV_32FC3>::operator/=(img);
+        return *this;
+    }
+    fYuvImg operator+(const fYuvImg &img){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator+(img);
+    }
+    fYuvImg operator-(const fYuvImg &img){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator-(img);
+    }
+    fYuvImg operator*(const fYuvImg &img){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator*(img);
+    }
+    fYuvImg operator/(const fYuvImg &img){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator/(img);
+    }
+    
+    fYuvImg operator*(fKernel &ker){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator*(ker);
+    }
+    
+    fYuvImg operator-(){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::operator-();
+    }
+    
+    fYuvImg map(fYuvPix f(fYuvPix x)){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::map(f);
+    }
+    
+    template<typename A> fYuvImg map(fYuvPix f(fYuvPix x, A arg), A arg){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::map(f, arg);
+    }
+    
+    fYuvImg map(fYuvPix f(int x, int y, image_t<fYuvPix, CV_32FC3> *self)){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::map(f);
+    }
+
+    template<typename A> fYuvImg map(fYuvPix f(int x, int y, image_t<fYuvPix, CV_32FC3> *self, A arg), A arg){
+        return (fYuvImg) img_t<fYuvPix, CV_32FC3>::map(f, arg);
+    }
+    
+    // constructors
+    fYuvImg() : img_t<fYuvPix, CV_32FC3>(){};
+    fYuvImg(const unsigned w, const unsigned h,
+            const int ox=0,   const int oy=0) : img_t<fYuvPix, CV_32FC3>(w, h,ox,oy){};
+    
+    fYuvImg(const cv::Mat &mat) : img_t<fYuvPix, CV_32FC3>(mat){};
+    
+    // copy constructors
+    fYuvImg(const fYuvImg &img) : img_t<fYuvPix, CV_32FC3>(img){};
+    fYuvImg(const img_t<fYuvPix, CV_32FC3> &img) : img_t<fYuvPix, CV_32FC3>(img){};
+
+    // move constructors
+    fYuvImg(fYuvImg &&img) : img_t<fYuvPix, CV_32FC3>(std::move(img)){};
+    fYuvImg(img_t<fYuvPix, CV_32FC3> &&img) : img_t<fYuvPix, CV_32FC3>(std::move(img)){};
+
+    // move assignment
+    fYuvImg &operator=(fYuvImg &&img){
+        img_t<fYuvPix, CV_32FC3>::operator=(std::move(img));
+        return *this;
+    }
+    
+};
+
+
+
 
 } // namespace
 

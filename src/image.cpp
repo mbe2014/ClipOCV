@@ -137,6 +137,36 @@ fMonoImg::operator fCmpImg() {
 }
 
 
+fMonoImg::operator fYuvImg() {
+    fYuvImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fMonoPix *p = GetRoiLine(y);
+        fYuvPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
+    }
+    return res;
+}
+
+
 // rgb image casting
 
 fRgbImg::operator fMonoImg() {
@@ -197,6 +227,35 @@ fRgbImg::operator fCmpImg() {
     for (int y=0; y<res.GetRoiHeight(); y++) {
         fRgbPix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
+    }
+    return res;
+}
+
+fRgbImg::operator fYuvImg() {
+    fYuvImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fRgbPix *p = GetRoiLine(y);
+        fYuvPix  *q = res.GetRoiLine(y);
         unsigned i;
         for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
             *(q+0) = *(p+0);
@@ -344,6 +403,35 @@ fCieImg::operator fCmpImg() {
     for (int y=0; y<res.GetRoiHeight(); y++) {
         fCiePix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
+    }
+    return res;
+}
+
+fCieImg::operator fYuvImg() {
+    fYuvImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCiePix *p = GetRoiLine(y);
+        fYuvPix  *q = res.GetRoiLine(y);
         unsigned i;
         for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
             *(q+0) = *(p+0);
@@ -514,6 +602,35 @@ fCmpImg::operator fCieImg() {
     return res;
 }
 
+fCmpImg::operator fYuvImg() {
+    fYuvImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        fCmpPix *p = GetRoiLine(y);
+        fYuvPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
+    }
+    return res;
+}
+
 
 //----------------------------------
 // uint8_t image conversions
@@ -579,6 +696,35 @@ bMonoImg::operator fCmpImg() {
     for (int y=0; y<res.GetRoiHeight(); y++) {
         bMonoPix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
+    }
+    return res;
+}
+
+bMonoImg::operator fYuvImg() {
+    fYuvImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        bMonoPix *p = GetRoiLine(y);
+        fYuvPix  *q = res.GetRoiLine(y);
         unsigned i;
         for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
             *(q+0) = *(p+0);
@@ -681,6 +827,37 @@ bRgbImg::operator fCmpImg() {
     }
     return res;
 }
+
+
+bRgbImg::operator fYuvImg() {
+    fYuvImg res(GetRoiWidth(), GetRoiHeight());
+    res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
+    res.SetOrigin(orgX, orgY);
+    
+    for (int y=0; y<res.GetRoiHeight(); y++) {
+        bRgbPix *p = GetRoiLine(y);
+        fYuvPix  *q = res.GetRoiLine(y);
+        unsigned i;
+        for (i = 0 ; i < res.GetRoiWidth()-8 ; i+=8) {
+            *(q+0) = *(p+0);
+            *(q+1) = *(p+1);
+            *(q+2) = *(p+2);
+            *(q+3) = *(p+3);
+            *(q+4) = *(p+4);
+            *(q+5) = *(p+5);
+            *(q+6) = *(p+6);
+            *(q+7) = *(p+7);
+            p+=8;
+            q+=8;
+        }
+        while (i < GetRoiWidth()) {
+            *(q++) = *(p++);
+            i++;
+        }
+    }
+    return res;
+}
+
 
 //----------------------
 // define common kernels

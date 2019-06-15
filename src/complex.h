@@ -63,12 +63,14 @@ public:
     fCmpPix &operator=(const fRgbPix &pix);
     fCmpPix &operator=(const bRgbPix &pix);
     fCmpPix &operator=(const fCiePix &pix);
+    fCmpPix &operator=(const fYuvPix &pix);
     
     
     // casting operators
     operator fRgbPix();
     operator bRgbPix();
     operator fCiePix();
+    operator fYuvPix();
     operator bMonoPix();
     operator fMonoPix();
     

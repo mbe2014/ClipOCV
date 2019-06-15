@@ -28,6 +28,7 @@ void imshow(const char *winname, fMonoImg &img);
 void imshow(const char *winname, fRgbImg  &img);
 void imshow(const char *winname, fCieImg  &img);
 void imshow(const char *winname, fCmpImg  &img);
+void imshow(const char *winname, fYuvImg  &img);
 
 } // namespace
 

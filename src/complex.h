@@ -47,6 +47,11 @@ public:
     fCmpPix  GetConj() {return fCmpPix(Re(), -Im());}
     const fCmpPix GetConj() const {return fCmpPix(Re(), -Im());}
     
+    // help casting to color types  via YUV which allows negative values
+    fYuvPix GetYuvPix() { return fYuvPix(GetNorm(), cos(GetPhase()), sin(GetPhase()));  }
+    fCiePix GetCiePix() { return GetYuvPix().GetCiePix();                               }
+    fRgbPix GetRgbPix() { return GetYuvPix().GetRgbPix();                               }
+ 
     // assign operators.
     fCmpPix  &operator=(const float v){
         Re() = v;

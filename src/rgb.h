@@ -69,6 +69,10 @@ public:
                 Blue()  * RGB2YUV[8];
     }
     
+
+    fCiePix GetCiePix() { return fCiePix(GetCieX(), GetCieY(), GetCieZ());  }
+    fCiePix GetYuvPix() { return fYuvPix(GetYuvY(), GetYuvU(), GetYuvV());  }
+    
     // assign and cast operators.
     
     fRgbPix &operator=(const float v){	// float level
@@ -314,6 +318,9 @@ public:
                 (float) Blue()  * RGB2YUV[8];
     }
     
+    fCiePix GetCiePix() { return fCiePix(GetCieX(), GetCieY(), GetCieZ());  }
+    fCiePix GetYuvPix() { return fYuvPix(GetYuvY(), GetYuvU(), GetYuvV());  }
+
     // assign and cast operators.
     
     bRgbPix &operator=(const uint8_t v){	 

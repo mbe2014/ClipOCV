@@ -69,6 +69,9 @@ public:
     }
     
     
+    fCiePix GetCiePix() { return fCiePix(GetCieX(), GetCieY(), GetCieZ());  }
+    fRgbPix GetRgbPix() { return fRgbPix(GetRed(), GetGreen(), GetBlue());  }
+
     // assign and cast operators.
     
     fYuvPix &operator=(const float v){	// float level

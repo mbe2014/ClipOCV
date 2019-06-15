@@ -32,11 +32,8 @@ fCiePix &fCiePix::operator=(const bRgbPix &pix){
     return *this;
 }
 
-//@@@ is this a reasonable conversion
 fCiePix &fCiePix::operator=(const fCmpPix &pix){
-    CieX() = pix.GetNorm();
-    CieY() = pix.GetNorm();
-    CieZ() = pix.GetNorm();
+    *this = pix.GetCiePix();
     return *this;
 }
 

@@ -49,6 +49,12 @@ void imshow(const char *winname, fCieImg  &img)
     cv::imshow(winname,img1.GetMat());
 }
 
+void imshow(const char *winname, fYuvImg  &img)
+{
+    bRgbImg img1 = img;
+    cv::imshow(winname,img1.GetMat());
+}
+
 void imshow(const char *winname, fCmpImg  &img)
 {
     bMonoImg img1 = img;

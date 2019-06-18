@@ -96,13 +96,20 @@ public:
     // set ROI - ROI is a window within an image - not a new image instance
     // coordinates are alwase absolute coordinate of the image.
     void SetRoi(const unsigned x, const unsigned y, const unsigned w, const unsigned h){
-        assert (x < GetWidth() && y < GetHeight());
-        assert (x+w <= GetWidth() && y+h <= GetHeight());
+        if (GetWidth() > 0 && GetHeight() > 0) {
+		assert (x < GetWidth() && y < GetHeight());
+        	assert (x+w <= GetWidth() && y+h <= GetHeight());
 
-        roi = mat(cv::Rect(x,y, w,h));
-        roiX = x;
-        roiY = y;
-        SetOrigin(0,0); // previous origin if any is not valid anymore
+        	roi = mat(cv::Rect(x,y, w,h));
+        	roiX = x;
+        	roiY = y;
+        	SetOrigin(0,0); // previous origin if any is not valid anymore
+	}
+	else {
+	    roiX = 0;
+	    roiY = 0;
+	    roi = mat;
+	}
     }
 
     void SetRoi(cv::Rect rect){

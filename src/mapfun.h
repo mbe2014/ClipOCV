@@ -70,12 +70,33 @@ inline float flipV(int x, int y, fMonoImgBasep(self))
     return self->aPix(x, self->GetHeight()-y-1);
 }
 
+inline unsigned char flipH(int x, int y, bMonoImgBasep(self))
+{
+    return self->aPix(self->GetWidth()-x-1, y);
+}
+
+inline unsigned char flipV(int x, int y, bMonoImgBasep(self))
+{
+    return self->aPix(x, self->GetHeight()-y-1);
+}
+
+
 inline fRgbPix flipH(int x, int y, fRgbImgBasep(self))
 {
     return self->aPix(self->GetWidth()-x-1, y);
 }
 
 inline fRgbPix flipV(int x, int y, fRgbImgBasep(self))
+{
+    return self->aPix(x, self->GetHeight()-y-1);
+}
+
+inline bRgbPix flipH(int x, int y, bRgbImgBasep(self))
+{
+    return self->aPix(self->GetWidth()-x-1, y);
+}
+
+inline bRgbPix flipV(int x, int y, bRgbImgBasep(self))
 {
     return self->aPix(x, self->GetHeight()-y-1);
 }

@@ -324,14 +324,14 @@ public:
         return *this;
     }
     
-    bRgbPix &operator*= (const uint8_t c){
+    bRgbPix &operator*= (const float c){
         Red()   *= c;
         Green() *= c;
         Blue()  *= c;
         return *this;
     }
     
-    bRgbPix &operator/= (const uint8_t c){
+    bRgbPix &operator/= (const float c){
         Red()   /= c;
         Green() /= c;
         Blue()  /= c;
@@ -356,7 +356,7 @@ public:
         return tmp;
     }
     
-    bRgbPix operator* (const uint8_t c){
+    bRgbPix operator* (const float c){
         bRgbPix tmp;
         tmp.Red()   = Red()   * c;
         tmp.Green() = Green() * c;
@@ -364,7 +364,7 @@ public:
         return tmp;
     }
     
-    bRgbPix operator/ (const uint8_t c){
+    bRgbPix operator/ (const float c){
         bRgbPix tmp;
         tmp.Red()   = Red()   / c;
         tmp.Green() = Green() / c;

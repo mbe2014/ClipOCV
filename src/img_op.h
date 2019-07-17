@@ -296,7 +296,7 @@ public:
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);
 
-        for (int y=0; y<res.GetRoiHeight(); y++) {
+        for (unsigned y=0; y<res.GetRoiHeight(); y++) {
             T *p = GetRoiLine(y);
             T *q = res.GetRoiLine(y);
             unsigned i;
@@ -324,7 +324,7 @@ public:
         img_t res(GetRoiWidth(), GetRoiHeight());  
         res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
         res.SetOrigin(orgX, orgY);
-        for (int y=0; y<res.GetRoiHeight(); y++) {
+        for (unsigned y=0; y<res.GetRoiHeight(); y++) {
             T *p = GetRoiLine(y);
             T *q = res.GetRoiLine(y);
             unsigned i;

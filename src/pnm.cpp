@@ -84,12 +84,12 @@ pnm_t *read_image(FILE *fp)
     
     while(fscanf(fp,"#%m[^\n]\n",&comment) > 0) free(comment);
     
-    if (fscanf(fp,"%u%u\n", &image->width, &image->height) != 2) {
+    if (fscanf(fp,"%d%d\n", &image->width, &image->height) != 2) {
         error_msg("Pnm: rw: Not A pnm file",0);
         clip_exception(ERR_UNKNOWN_FORMAT);
     }
 
-    if (fscanf(fp,"%u%*c",   &image->maxval) != 1) {   // force the new-line to be one char
+    if (fscanf(fp,"%d%*c",   &image->maxval) != 1) {   // force the new-line to be one char
         error_msg("Pnm: rw: Not A pnm file",0);
         clip_exception(ERR_UNKNOWN_FORMAT);
     }
@@ -103,7 +103,7 @@ pnm_t *read_image(FILE *fp)
     if (fread(image->data,
               PSIZE(image->type),
               image->width * image->height,
-              fp) != image->width * image->height) {
+              fp) != (unsigned) image->width * image->height) {
         error_msg("Pnm: rw: corrupted image file",0);
         clip_exception(ERR_UNKNOWN_FORMAT);
     }

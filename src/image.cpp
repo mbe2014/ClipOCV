@@ -53,7 +53,7 @@ template <class inT, class InP,  class outT, class outP> inT::operator outT() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         inP *p = GetRoiLine(y);
         outP  *q = res.GetRoiLine(y);
         unsigned i;
@@ -83,7 +83,7 @@ fMonoImg::operator fCieImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fMonoPix *p = GetRoiLine(y);
         fCiePix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -112,7 +112,7 @@ fMonoImg::operator fCmpImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fMonoPix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -165,7 +165,7 @@ fRgbImg::operator fCieImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fRgbPix *p = GetRoiLine(y);
         fCiePix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -194,7 +194,7 @@ fRgbImg::operator fCmpImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fRgbPix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -225,7 +225,7 @@ fCieImg::operator fMonoImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCiePix *p = GetRoiLine(y);
         fMonoPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -254,7 +254,7 @@ fCieImg::operator bMonoImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCiePix *p = GetRoiLine(y);
         bMonoPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -283,7 +283,7 @@ fCieImg::operator bRgbImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCiePix *p = GetRoiLine(y);
         bRgbPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -312,7 +312,7 @@ fCieImg::operator fRgbImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCiePix *p = GetRoiLine(y);
         fRgbPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -341,7 +341,7 @@ fCieImg::operator fCmpImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCiePix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -372,7 +372,7 @@ fCmpImg::operator fMonoImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCmpPix *p = GetRoiLine(y);
         fMonoPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -401,7 +401,7 @@ fCmpImg::operator bMonoImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCmpPix *p = GetRoiLine(y);
         bMonoPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -431,7 +431,7 @@ fCmpImg::operator bRgbImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCmpPix *p = GetRoiLine(y);
         bRgbPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -461,7 +461,7 @@ fCmpImg::operator fRgbImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCmpPix *p = GetRoiLine(y);
         fRgbPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -490,7 +490,7 @@ fCmpImg::operator fCieImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         fCmpPix *p = GetRoiLine(y);
         fCiePix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -547,7 +547,7 @@ bMonoImg::operator fCieImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         bMonoPix *p = GetRoiLine(y);
         fCiePix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -576,7 +576,7 @@ bMonoImg::operator fCmpImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         bMonoPix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -629,7 +629,7 @@ bRgbImg::operator fCieImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         bRgbPix *p = GetRoiLine(y);
         fCiePix  *q = res.GetRoiLine(y);
         unsigned i;
@@ -658,7 +658,7 @@ bRgbImg::operator fCmpImg() {
     res.SetRoi(0,0,res.GetWidth(),res.GetHeight());
     res.SetOrigin(orgX, orgY);
     
-    for (int y=0; y<res.GetRoiHeight(); y++) {
+    for (unsigned y=0; y<res.GetRoiHeight(); y++) {
         bRgbPix *p = GetRoiLine(y);
         fCmpPix  *q = res.GetRoiLine(y);
         unsigned i;

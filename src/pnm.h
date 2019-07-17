@@ -48,7 +48,7 @@ typedef struct {
     int width;                        /* image width              */
     int height;                       /* image height             */
     int maxval;                       /* max value for band       */
-    uint8_t *data;              /* pixel data               */
+    uint8_t *data;                    /* pixel data               */
 } pnm_t;
 
 /*

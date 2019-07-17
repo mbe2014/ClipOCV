@@ -137,14 +137,14 @@ public:
     
     // 2D absolute indexing ignoring origin, ignoring ROI, indexing operators
     T &aPix(const int x, const int y){
-        assert(x >= 0 && x < GetWidth());
-        assert(y >= 0 && y < GetHeight());
+        assert(x >= 0 && x < (int) GetWidth());
+        assert(y >= 0 && y < (int) GetHeight());
         return GetData()[y*(int)GetWidth() + x];
     }
     
     T &aPix(const int x, const int y) const {
-        assert(x >= 0 && x < GetWidth());
-        assert(y >= 0 && y < GetHeight());
+        assert(x >= 0 && x < (int) GetWidth());
+        assert(y >= 0 && y < (int) GetHeight());
         return GetData()[y*(int)GetWidth() + x];
     }
 

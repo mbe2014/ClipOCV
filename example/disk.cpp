@@ -32,7 +32,7 @@ using namespace clipocv;
 fRgbPix disk(int x, int y, fRgbImgBasep(self))
 {
    static fRgbPix whitePix(255,255,255);
-   unsigned r = (self->GetWidth()/2)*(self->GetHeight()/2);
+   int r = (self->GetWidth()/2)*(self->GetHeight()/2);
    if (x*x+y*y < r) return self->Pix(x,y);
    return whitePix - self->Pix(x,y);
 }
